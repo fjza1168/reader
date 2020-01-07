@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ldp.reader">
+
+    <!-- ********************************permission************************************ -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+
+    <application
+        android:name="com.ldp.reader.App"
+        android:allowBackup="true"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:persistent="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name="com.ldp.reader.ui.activity.SplashActivity"
+            android:theme="@style/SplashTheme" />
+        <activity android:name="com.ldp.reader.ui.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.ldp.reader.ui.activity.BookDiscussionActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.DiscDetailActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BillboardActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BookSortActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BookSortListActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.SearchActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BookListActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BookListDetailActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BillBookActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.OtherBillBookActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.BookDetailActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.DownloadActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.ReadActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.FileSystemActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.CommunityActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.MoreSettingActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.LoginActivity" />
+
+        <service android:name="com.ldp.reader.service.DownloadService" />
+        <service android:name="com.ldp.reader.service.RefreshService"
+            android:process=":RefreshService"/>
+        <service android:name="com.ldp.reader.service.RefreshJobService"
+            android:process=":RefreshJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+    </application>
+
+</manifest>
