@@ -77,6 +77,9 @@ public class SystemBarUtils {
         setFlag(activity,STABLE_NAV);
     }
 
+    public static void setStableNavBarColor(Activity activity, int color){
+        activity.getWindow().setNavigationBarColor(color);
+    }
     public static void showStableNavBar(Activity activity){
         clearFlag(activity,STABLE_NAV);
     }

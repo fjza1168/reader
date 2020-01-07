@@ -2,8 +2,13 @@ package com.ldp.reader;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
+import com.ldp.reader.utils.EncryptUtils;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -12,6 +17,7 @@ import com.tencent.bugly.crashreport.CrashReport;
  */
 
 public class App extends Application {
+    private static final String TAG   = App.class.getSimpleName();
     private static Context sInstance;
 
 
@@ -26,6 +32,7 @@ public class App extends Application {
         if (!LeakCanary.isInAnalyzerProcess(this)) {
             LeakCanary.install(this);
         }
+        getCertificateMD5();
     }
 
     @Override
@@ -36,5 +43,21 @@ public class App extends Application {
 
     public static Context getContext(){
         return sInstance;
+    }
+
+    private void getCertificateMD5() {
+        try {
+            String packageName = getApplicationContext().getPackageName();
+            PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(
+                    packageName, PackageManager.GET_SIGNATURES);
+            Signature[] signs = packageInfo.signatures;
+            Signature sign = signs[0];
+            byte[] cert = sign.toByteArray();
+            String md5 = EncryptUtils.encryptMD5ToString(cert);
+
+            Log.e(TAG, "md5 = " + md5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
