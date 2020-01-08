@@ -12,6 +12,7 @@ import com.ldp.reader.model.bean.ChapterBean;
 import com.ldp.reader.model.bean.ChapterInfoBean;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.bean.ContentBean;
+import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
 import com.ldp.reader.model.bean.SyncBookShelfBean;
 import com.ldp.reader.model.bean.packages.BillboardPackage;
@@ -36,6 +37,7 @@ import com.ldp.reader.model.bean.ReviewDetailBean;
 import com.ldp.reader.model.bean.SortBookBean;
 import com.ldp.reader.model.bean.packages.SearchBookPackage;
 import com.ldp.reader.model.bean.packages.SearchBookPackageByBiquge;
+import com.mob.secverify.datatype.VerifyResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ import io.reactivex.Single;
 import io.reactivex.functions.Function;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
+import retrofit2.http.Query;
 
 /**
  * Created by ldp on 17-4-20.
@@ -111,6 +114,11 @@ public class RemoteRepository {
     public Single<LoginResultBean> userLogin(String userNameInput, String passwordInput) {
         return mBookApiOwn.userLogin(userNameInput,passwordInput);
     }
+
+    public Single<DirectLoginResultBean> userDirectLogin(VerifyResult verifyResult) {
+        return mBookApiOwn.userDirectLogin("2dc105548a750","b63ac145473ed640a5a449f368570596",verifyResult.getToken() ,verifyResult.getOpToken(),verifyResult.getOperator()) ;
+    }
+
 
     public Single<List<BookIdBean>> getBookShelf(String header) {
         return mBookApiOwn.getBookShelf(header);

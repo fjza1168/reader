@@ -70,6 +70,16 @@
 			android:textSize="23sp"
 			android:textColor="@color/white"
 			android:background="@drawable/shape_common_gray_corner"/>
+
+		<Button
+			android:id="@+id/btn_direct_login"
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:layout_marginTop="26dp"
+			android:text="本机号码一键登录"
+			android:textSize="23sp"
+			android:textColor="@color/white"
+			android:background="@drawable/shape_common_gray_corner"/>
 	</LinearLayout>
 	<LinearLayout
 		android:visibility="gone"

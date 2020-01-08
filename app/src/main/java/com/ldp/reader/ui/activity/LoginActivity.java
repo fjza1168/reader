@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ldp.reader.R;
+import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
 import com.ldp.reader.presenter.LoginPresenter;
 import com.ldp.reader.presenter.contract.LoginContract;
@@ -30,7 +31,7 @@ import butterknife.OnClick;
 
 public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         implements LoginContract.View {
-    private static final String  TAG  = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.et_user_name_input)
     EditText etUserNameInput;
     @BindView(R.id.et_password_input)
@@ -47,6 +48,8 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     ImageView ivUserLogo;
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
+    @BindView(R.id.btn_direct_login)
+    Button btnDirectLogin;
 
 
     private String userName;
@@ -90,7 +93,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
             llUserNotLogin.setVisibility(View.VISIBLE);
             llUserLogin.setVisibility(View.GONE);
         } else {
-            Log.d(TAG, "processLogic: token "+SharedPreUtils.getInstance().getString("token"));
+            Log.d(TAG, "processLogic: token " + SharedPreUtils.getInstance().getString("token"));
             llUserNotLogin.setVisibility(View.GONE);
             llUserLogin.setVisibility(View.VISIBLE);
             tvUserName.setText(SharedPreUtils.getInstance().getString("userName"));
@@ -112,6 +115,18 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     }
 
     @Override
+    public void finishDirectLogin(DirectLoginResultBean loginResultBean) {
+         if(200 ==loginResultBean.getStatus()){
+            SharedPreUtils.getInstance().putString("token", loginResultBean.getRes().getPhone());
+            SharedPreUtils.getInstance().putString("userName", loginResultBean.getRes().getPhone());
+            ToastUtils.show("登录成功");
+            finish();
+        }else {
+             ToastUtils.show("登录失败" + loginResultBean.getError());
+         }
+    }
+
+    @Override
     public void showError() {
         ToastUtils.show("登录失败");
 
@@ -129,7 +144,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_login_back, R.id.btn_user_login})
+    @OnClick({R.id.iv_login_back, R.id.btn_user_login,R.id.btn_direct_login})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_login_back:
@@ -144,6 +159,12 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
                 }
                 mPresenter.userLogin(userName, password);
                 break;
+            case R.id.btn_direct_login:
+                mPresenter.directLogin();
+                break;
+            default:
+                break;
         }
     }
+
 }

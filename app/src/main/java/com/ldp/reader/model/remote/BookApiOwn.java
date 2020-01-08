@@ -5,6 +5,7 @@ import com.ldp.reader.model.bean.BookIdBean;
 import com.ldp.reader.model.bean.BookSearchResult;
 import com.ldp.reader.model.bean.ChapterBean;
 import com.ldp.reader.model.bean.ContentBean;
+import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
 import com.ldp.reader.model.bean.SyncBookShelfBean;
 
@@ -69,6 +70,14 @@ public interface BookApiOwn {
      */
     @POST("/login")
     Single<LoginResultBean> userLogin(@Query("username") String username, @Query("password") String password);
+
+    /**
+     * 登录
+     *
+     * @return
+     */
+    @POST("/directLogin")
+    Single<DirectLoginResultBean> userDirectLogin(@Query("appkey") String appkey , @Query("appSecret") String appSecret, @Query("token") String token , @Query("opToken") String opToken, @Query("operator") String operator ) ;
 
     /**
      * 获取所有书籍ID

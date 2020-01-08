@@ -2,6 +2,36 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.jakewharton.hugo'
 
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "2dc105548a750"
+    appSecret "b63ac145473ed640a5a449f368570596"
+    SecVerify {}
+    MobPush {
+        devInfo {
+//            MEIZU {
+//                appId "魅族的appid"
+//                appKey "魅族的appkey"
+//            }
+//            XIAOMI {
+//                appId "小米的appId"
+//                appKey "小米的appKey"
+//            }
+//            OPPO {
+//                appKey "OPPO的appKey"
+//                appSecret "OPPO的appSecret"
+//            }
+//            VIVO {
+//                appId "VIVO的appId"
+//                appKey  "VIVO的appSecret"
+//            }
+//            HUAWEI {
+//                appId "华为的appid"
+//            }
+        }
+    }
+}
 android {
     compileSdkVersion 27
     defaultConfig {
