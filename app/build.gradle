@@ -14,10 +14,10 @@ MobSDK {
 //                appId "魅族的appid"
 //                appKey "魅族的appkey"
 //            }
-//            XIAOMI {
-//                appId "小米的appId"
-//                appKey "小米的appKey"
-//            }
+            XIAOMI {
+                appId "2882303761518301612"
+                appKey "5471830173612"
+            }
 //            OPPO {
 //                appKey "OPPO的appKey"
 //                appSecret "OPPO的appSecret"
