@@ -23,4 +23,25 @@
         <attr name="rateInterval" format="dimension"/>
         <attr name="isIndicator" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="lib_pub_ScrollTab">
+        <attr name="lib_pub_stab_type">
+            <enum name="view" value="0" />
+            <enum name="view_group" value="1" />
+        </attr>
+        <attr name="lib_pub_stab_titles" format="string" />
+        <attr name="lib_pub_stab_avag" format="boolean" />
+        <attr name="lib_pub_stab_padding" format="dimension" />
+        <attr name="lib_pub_stab_indicatorType">
+            <enum name="trend" value="0" />
+            <enum name="translation" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="lib_pub_stab_indicatorColor" format="color" />
+        <attr name="lib_pub_stab_indicatorWidth" format="dimension" />
+        <attr name="lib_pub_stab_indicatorWeight" format="dimension" />
+        <attr name="lib_pub_stab_indicatorRadius" format="dimension" />
+        <attr name="lib_pub_stab_indicatorPadding" format="dimension" />
+        <attr name="lib_pub_stab_duration" format="integer" />
+    </declare-styleable>
 </resources>

@@ -8,38 +8,52 @@
 	android:orientation="vertical">
 	<android.support.design.widget.CoordinatorLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 		<android.support.design.widget.AppBarLayout
 			android:id="@+id/appbar"
 			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize">
+			android:layout_height="wrap_content">
 
 			<android.support.v7.widget.Toolbar
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:background="@color/colorPrimary"
 				android:minHeight="?attr/actionBarSize"
+				android:background="@color/colorPrimary"
 				android:fitsSystemWindows="true"
 				android:theme="@style/Theme.ToolBar.Menu"
 				app:layout_scrollFlags="scroll|enterAlways">
 			</android.support.v7.widget.Toolbar>
 
+			<android.support.design.widget.TabLayout
+				android:visibility="gone"
+				android:id="@+id/tab_tl_indicator"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:background="@color/colorPrimary"
+				android:layout_gravity="bottom"
+				app:tabIndicatorColor="@color/white"
+				app:tabSelectedTextColor="@color/white"
+				app:tabTextColor="@color/translucent_text">
+			</android.support.design.widget.TabLayout>
+			<com.ldp.reader.widget.tab.ScrollTab
+				android:id="@+id/st_main"
+				android:layout_width="match_parent"
+				android:layout_height="40dp"
+				android:layout_marginTop="10dp"
+				android:background="@color/colorPrimary"
+				android:orientation="vertical"
+				app:lib_pub_stab_avag="true"
+				app:lib_pub_stab_indicatorColor="@color/lib_pub_color_destroy"
+				app:lib_pub_stab_indicatorPadding="20dp"
+				app:lib_pub_stab_indicatorRadius="1dp"
+				app:lib_pub_stab_indicatorType="trend"
+				app:lib_pub_stab_indicatorWeight="4dp"
+				app:lib_pub_stab_indicatorWidth="40dp"
+				app:lib_pub_stab_type="view_group" />
 		</android.support.design.widget.AppBarLayout>
-
-
-		<android.support.design.widget.TabLayout
-			android:visibility="gone"
-			android:id="@+id/tab_tl_indicator"
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="@color/colorPrimary"
-			app:tabIndicatorColor="@color/white"
-			app:tabSelectedTextColor="@color/white"
-			app:tabTextColor="@color/translucent_text">
-		</android.support.design.widget.TabLayout>
 
 		<android.support.v4.view.ViewPager
 			android:id="@+id/tab_vp"

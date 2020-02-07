@@ -1,6 +1,7 @@
 package com.ldp.reader.ui.base;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -9,6 +10,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.ldp.reader.R;
 import com.ldp.reader.utils.StatusBarCompat;
@@ -76,10 +79,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getContentId());
         initData(savedInstanceState);
         unbinder = ButterKnife.bind(this);
-        View decorView = getWindow().getDecorView();
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+
 //        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 //                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+//        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.TRANSPARENT);
 
         decorView.setSystemUiVisibility(uiOptions);
         initToolbar();

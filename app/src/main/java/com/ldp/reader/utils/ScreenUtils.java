@@ -1,6 +1,8 @@
 package com.ldp.reader.utils;
 
 import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -117,5 +119,19 @@ public class ScreenUtils {
                 .getResources()
                 .getDisplayMetrics();
         return metrics;
+    }
+
+    /**
+     * 获取字体高度
+     */
+    public static float getTextHeight(Paint p) {
+        Paint.FontMetrics fm = p.getFontMetrics();
+        return (float) ((Math.ceil(fm.descent - fm.top) + 2) / 2);
+    }
+
+    public static int getTextWidth(String str, Paint paint) {
+        Rect bounds = new Rect();
+        paint.getTextBounds(str, 0, str.length(), bounds);
+        return bounds.width();
     }
 }
