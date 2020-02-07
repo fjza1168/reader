@@ -80,7 +80,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
                         .subscribe(new Consumer<DirectLoginResultBean>() {
                             @Override
                             public void accept(DirectLoginResultBean directLoginResultBean) throws Exception {
-
+                               mView.finishDirectLogin(directLoginResultBean);
                             }
                         }, new Consumer<Throwable>() {
                             @Override

@@ -50,6 +50,8 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     TextView tvUserName;
     @BindView(R.id.btn_direct_login)
     Button btnDirectLogin;
+    @BindView(R.id.btn_user_logout)
+    Button btnUserLogout;
 
 
     private String userName;
@@ -92,12 +94,12 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
             Log.d(TAG, "processLogic: token空 ");
             llUserNotLogin.setVisibility(View.VISIBLE);
             llUserLogin.setVisibility(View.GONE);
+            mPresenter.preDirectLogin();
         } else {
             Log.d(TAG, "processLogic: token " + SharedPreUtils.getInstance().getString("token"));
             llUserNotLogin.setVisibility(View.GONE);
             llUserLogin.setVisibility(View.VISIBLE);
             tvUserName.setText(SharedPreUtils.getInstance().getString("userName"));
-
         }
     }
 
@@ -144,7 +146,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_login_back, R.id.btn_user_login,R.id.btn_direct_login})
+    @OnClick({R.id.iv_login_back, R.id.btn_user_login,R.id.btn_direct_login,R.id.btn_user_logout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_login_back:
@@ -162,9 +164,18 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
             case R.id.btn_direct_login:
                 mPresenter.directLogin();
                 break;
+            case R.id.btn_user_logout:
+                userLogout();
+                break;
             default:
                 break;
         }
     }
+
+    private void userLogout() {
+        llUserNotLogin.setVisibility(View.VISIBLE);
+        llUserLogin.setVisibility(View.GONE);
+        SharedPreUtils.getInstance().putString("token","");
+        SharedPreUtils.getInstance().putString("userName", "");    }
 
 }

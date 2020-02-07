@@ -101,6 +101,15 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
 			android:textColor="@color/black"/>
+		<Button
+			android:id="@+id/btn_user_logout"
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:layout_marginTop="26dp"
+			android:text="退出登录"
+			android:textSize="23sp"
+			android:textColor="@color/white"
+			android:background="@drawable/shape_common_gray_corner"/>
 </LinearLayout>
 	
 </LinearLayout>
