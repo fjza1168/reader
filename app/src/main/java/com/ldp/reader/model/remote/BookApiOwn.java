@@ -80,18 +80,37 @@ public interface BookApiOwn {
     Single<DirectLoginResultBean> userDirectLogin(@Query("appkey") String appkey , @Query("appSecret") String appSecret, @Query("token") String token , @Query("opToken") String opToken, @Query("operator") String operator ) ;
 
     /**
-     * 获取所有书籍ID
+     * 获取所有书籍ID  传统账号密码登录
      *
      * @return
      */
     @POST("/getBookShelf")
     Single<List<BookIdBean>> getBookShelf(@Header("Authorization") String header);
 
+
     /**
-     * 上传所有书籍ID
+     * 获取所有书籍ID 运营商认证
+     *
+     * @return
+     */
+    @GET("/getBookShelfByMobile")
+    Single<List<BookIdBean>> getBookShelfByMobile(@Query("mobile")String mobile ,@Query("mobileToken")String mobileToken);
+
+    /**
+     * 上传所有书籍ID  传统账号密码登录
      *
      * @return
      */
     @POST("/synBookShelf")
     Single<SyncBookShelfBean> setBookShelf(@Header("Authorization") String header, @Body RequestBody body);
+
+    /**
+     * 上传所有书籍ID   运营商认证
+     *
+     * @return
+     */
+    @POST("/synBookShelfByMobile")
+    Single<SyncBookShelfBean> setBookShelfByMobile(@Body RequestBody body);
+
+
 }

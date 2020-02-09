@@ -11,20 +11,33 @@ import java.util.List;
 
 public interface BookShelfContract {
 
-    interface View extends BaseContract.BaseView{
+    interface View extends BaseContract.BaseView {
         void finishRefresh(List<CollBookBean> collBookBeans);
+
         void finishUpdate();
+
         void finishSyncBook();
+
         void showErrorTip(String error);
     }
 
-    interface Presenter extends BaseContract.BasePresenter<View>{
+    interface Presenter extends BaseContract.BasePresenter<View> {
         void refreshCollBooks();
+
         void createDownloadTask(CollBookBean collBookBean);
+
         void updateCollBooks(List<CollBookBean> collBookBeans);
+
         void loadRecommendBooks(String gender);
+
         void getBookShelf(String token);
+
+        void getBookShelfByMobile(String mobile, String token);
+
         void getBookInfo(List<String> bookId);
+
         void setBookShelf(List<String> bookIds);
+
+        void setBookShelfByMobile(List<String> bookIds,String mobile,String mobileToken);
     }
 }

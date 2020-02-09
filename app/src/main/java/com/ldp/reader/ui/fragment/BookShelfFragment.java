@@ -121,11 +121,14 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                     @Override
                     public void accept(BookSyncEvent bookSyncEvent) throws Exception {
                         String token = SharedPreUtils.getInstance().getString("token");
-                        if (TextUtils.isEmpty(token)){
+                        if (TextUtils.isEmpty(token)) {
                             ToastUtils.show("请登录");
                             return;
-                        }else {
+                        } else if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
                             mPresenter.getBookShelf(token);
+                        } else {
+                            String mobile = SharedPreUtils.getInstance().getString("userName");
+                            mPresenter.getBookShelfByMobile(mobile, token);
                         }
                     }
                 });
@@ -319,7 +322,13 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                                 for (CollBookBean collBookBean:collBookBeans ) {
                                     bookIds.add(collBookBean.get_id());
                                 }
-                                mPresenter.setBookShelf(bookIds);
+                                if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))){
+                                    mPresenter.setBookShelf(bookIds);
+                                }else {
+                                    String mobile  =  SharedPreUtils.getInstance().getString("userName");
+                                    String mobileToken =  SharedPreUtils.getInstance().getString("token");
+                                    mPresenter.setBookShelfByMobile(bookIds,mobile,mobileToken);
+                                }
                                 //从Adapter中删除
                                 mCollBookAdapter.removeItem(collBook);
                                 progressDialog.dismiss();

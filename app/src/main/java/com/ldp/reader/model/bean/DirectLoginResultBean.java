@@ -60,6 +60,16 @@ public class DirectLoginResultBean {
         private String email;
         private String operator;
 
+        public String getMobileToken() {
+            return mobileToken;
+        }
+
+        public void setMobileToken(String mobileToken) {
+            this.mobileToken = mobileToken;
+        }
+
+        private String mobileToken;
+
         public int getIsValid() {
             return isValid;
         }

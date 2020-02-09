@@ -107,6 +107,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     @Override
     public void finishLogin(LoginResultBean loginResultBean) {
         if (200 == loginResultBean.getCode()) {
+            SharedPreUtils.getInstance().putString("loginType", "password");
             SharedPreUtils.getInstance().putString("token", loginResultBean.getData());
             SharedPreUtils.getInstance().putString("userName", userName);
             ToastUtils.show("登录成功");
@@ -119,7 +120,8 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     @Override
     public void finishDirectLogin(DirectLoginResultBean loginResultBean) {
          if(200 ==loginResultBean.getStatus()){
-            SharedPreUtils.getInstance().putString("token", loginResultBean.getRes().getPhone());
+             SharedPreUtils.getInstance().putString("loginType", "telecom");
+             SharedPreUtils.getInstance().putString("token", loginResultBean.getRes().getMobileToken());
             SharedPreUtils.getInstance().putString("userName", loginResultBean.getRes().getPhone());
             ToastUtils.show("登录成功");
             finish();
@@ -175,7 +177,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     private void userLogout() {
         llUserNotLogin.setVisibility(View.VISIBLE);
         llUserLogin.setVisibility(View.GONE);
-        SharedPreUtils.getInstance().putString("token","");
-        SharedPreUtils.getInstance().putString("userName", "");    }
-
+        SharedPreUtils.getInstance().putString("token", "");
+        SharedPreUtils.getInstance().putString("userName", "");
+    }
 }

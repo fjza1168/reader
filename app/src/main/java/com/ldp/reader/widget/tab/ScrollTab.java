@@ -206,7 +206,7 @@ public class ScrollTab extends HorizontalScrollView implements View.OnClickListe
             } else if (mPositionOffset < 0.75) {
                 canvas.drawCircle(oriLeft, mHeight - dotRadius, dotRadius+0.5f, mDotPaint);
             } else {
-                canvas.drawCircle((left + dotRadius) * mPositionOffset - (left - oriLeft) * (1 - mPositionOffset * mPositionOffset*mPositionOffset) , mHeight - dotRadius, dotRadius+0.5f, mDotPaint);
+                canvas.drawCircle((left + dotRadius) * mPositionOffset - (left - oriLeft) * (1 - mPositionOffset * mPositionOffset * mPositionOffset  ) , mHeight - dotRadius, dotRadius+0.5f, mDotPaint);
             }
             mRectF.set(left, mHeight - mIndicatorWeight, right, mHeight);
         } else if (mIndicatorType == TYPE_INDICATOR_TRANSLATION) {

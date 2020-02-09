@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -241,6 +242,9 @@ RefreshLayout mRlRefresh;
     @Override
     public void finishHotWords(List<String> hotWords) {
         mHotTagList = hotWords;
+        Log.d(TAG, "finishHotWords: " + hotWords);
+//        mTgHot.setTags(hotWords);
+
         refreshTag();
     }
 
@@ -250,6 +254,14 @@ RefreshLayout mRlRefresh;
             mTagStart = 0;
             last = TAG_LIMIT;
         }
+        if(mHotTagList.size() <=TAG_LIMIT){
+            last = mHotTagList.size();
+        }
+        Log.d(TAG, "refreshTag: mHotTagList" + mHotTagList );
+        Log.d(TAG, "refreshTag: mTagStart " + mTagStart );
+        Log.d(TAG, "refreshTag: last" + last );
+
+
         List<String> tags = mHotTagList.subList(mTagStart, last);
         mTgHot.setTags(tags);
         mTagStart += TAG_LIMIT;

@@ -124,8 +124,17 @@ public class RemoteRepository {
         return mBookApiOwn.getBookShelf(header);
     }
 
-    public Single<SyncBookShelfBean> setBookShelf(String header, RequestBody body) {
-        return mBookApiOwn.setBookShelf(header,body);
+    public Single<List<BookIdBean>> getBookShelfByMobile(String mobile ,String token) {
+        return mBookApiOwn.getBookShelfByMobile(mobile,token);
+    }
+
+    public Single<SyncBookShelfBean> setBookShelf(String token, RequestBody body) {
+        return mBookApiOwn.setBookShelf(token,body);
+    }
+
+
+    public Single<SyncBookShelfBean> setBookShelfByMobile(RequestBody body) {
+        return mBookApiOwn.setBookShelfByMobile(body);
     }
 
 
