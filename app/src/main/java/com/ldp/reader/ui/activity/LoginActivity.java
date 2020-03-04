@@ -20,6 +20,8 @@ import com.ldp.reader.presenter.contract.LoginContract;
 import com.ldp.reader.ui.base.BaseMVPActivity;
 import com.ldp.reader.utils.SharedPreUtils;
 import com.ldp.reader.utils.ToastUtils;
+import com.mob.pushsdk.MobPush;
+import com.mob.pushsdk.MobPushCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,6 +103,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
             llUserLogin.setVisibility(View.VISIBLE);
             tvUserName.setText(SharedPreUtils.getInstance().getString("userName"));
         }
+        getRegId();
     }
 
 
@@ -179,5 +182,22 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         llUserLogin.setVisibility(View.GONE);
         SharedPreUtils.getInstance().putString("token", "");
         SharedPreUtils.getInstance().putString("userName", "");
+    }
+
+    String registrationId;
+    private void getRegId(){
+        Log.d(TAG, "preDirectLogin: registrationId");
+        registrationId = SharedPreUtils.getInstance().getString("registrationId");
+        Log.d(TAG, "onCallback: registrationId  " + registrationId);
+        if (TextUtils.isEmpty(registrationId)){
+            MobPush.getRegistrationId(new MobPushCallback<String>() {
+                @Override
+                public void onCallback(String s) {
+                    Log.d(TAG, "onCallback: registrationId  " + s);
+                    registrationId = s;
+                    SharedPreUtils.getInstance().putString("registrationId",registrationId);
+                }
+            });
+        }
     }
 }

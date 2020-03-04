@@ -20,6 +20,8 @@ public class Constant {
     public static final String SHARED_CONVERT_TYPE = "convert_type";
     public static final String SEX_BOY = "boy";
     public static final String SEX_GIRL = "girl";
+    public static final String APP_KEY = "2dc105548a750";
+    public static final String APP_SECRET = "b63ac145473ed640a5a449f368570596";
 
     /*URL_BASE*/
     public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
@@ -32,7 +34,7 @@ public class Constant {
     public static final String IMG_BASE_URL_IN_BIQUGE = "https://imgapi.jiaston.com/BookFiles/BookImages/";
 
     public static final String API_BASE_URL_OWN= "http://47.98.166.103";
-//    public static final String API_BASE_URL_OWN= "http://192.168.0.103";
+//    public static final String API_BASE_URL_OWN= "http://192.168.0.102";
 
 
 

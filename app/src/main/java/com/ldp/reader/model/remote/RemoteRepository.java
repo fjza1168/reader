@@ -48,6 +48,9 @@ import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import retrofit2.http.Query;
 
+import static com.ldp.reader.utils.Constant.APP_KEY;
+import static com.ldp.reader.utils.Constant.APP_SECRET;
+
 /**
  * Created by ldp on 17-4-20.
  */
@@ -115,8 +118,8 @@ public class RemoteRepository {
         return mBookApiOwn.userLogin(userNameInput,passwordInput);
     }
 
-    public Single<DirectLoginResultBean> userDirectLogin(VerifyResult verifyResult) {
-        return mBookApiOwn.userDirectLogin("2dc105548a750","b63ac145473ed640a5a449f368570596",verifyResult.getToken() ,verifyResult.getOpToken(),verifyResult.getOperator()) ;
+    public Single<DirectLoginResultBean> userDirectLogin(VerifyResult verifyResult,String registrationId) {
+        return mBookApiOwn.userDirectLogin(APP_KEY,APP_SECRET,verifyResult.getToken() ,verifyResult.getOpToken(),verifyResult.getOperator(),registrationId) ;
     }
 
 

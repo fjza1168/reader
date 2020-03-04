@@ -77,7 +77,7 @@ public interface BookApiOwn {
      * @return
      */
     @POST("/directLogin")
-    Single<DirectLoginResultBean> userDirectLogin(@Query("appkey") String appkey , @Query("appSecret") String appSecret, @Query("token") String token , @Query("opToken") String opToken, @Query("operator") String operator ) ;
+    Single<DirectLoginResultBean> userDirectLogin(@Query("appkey") String appkey , @Query("appSecret") String appSecret, @Query("token") String token , @Query("opToken") String opToken, @Query("operator") String operator ,@Query("registrationId") String registrationId ) ;
 
     /**
      * 获取所有书籍ID  传统账号密码登录

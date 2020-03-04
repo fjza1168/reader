@@ -1,5 +1,6 @@
 package com.ldp.reader.presenter;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ldp.reader.model.bean.DirectLoginResultBean;
@@ -8,6 +9,9 @@ import com.ldp.reader.model.remote.RemoteRepository;
 import com.ldp.reader.presenter.contract.LoginContract;
 import com.ldp.reader.ui.base.RxPresenter;
 import com.ldp.reader.utils.RxUtils;
+import com.ldp.reader.utils.SharedPreUtils;
+import com.mob.pushsdk.MobPush;
+import com.mob.pushsdk.MobPushCallback;
 import com.mob.secverify.OperationCallback;
 import com.mob.secverify.SecVerify;
 import com.mob.secverify.VerifyCallback;
@@ -25,6 +29,7 @@ import io.reactivex.functions.Consumer;
 public class LoginPresenter extends RxPresenter<LoginContract.View>
         implements LoginContract.Presenter {
     private static final String TAG = LoginPresenter.class.getSimpleName();
+    private String registrationId;
     @Override
     public void userLogin(String userName, String passWord) {
       Disposable disposableLogin  =   RemoteRepository.getInstance().userLogin(userName,passWord)
@@ -45,14 +50,29 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
 
     @Override
     public void preDirectLogin() {
+        Log.d(TAG, "preDirectLogin: registrationId");
+        registrationId = SharedPreUtils.getInstance().getString("registrationId");
+        Log.d(TAG, "onCallback: registrationId  " + registrationId);
+        if (TextUtils.isEmpty(registrationId)){
+            MobPush.getRegistrationId(new MobPushCallback<String>() {
+                @Override
+                public void onCallback(String s) {
+                    Log.d(TAG, "onCallback: registrationId  " + s);
+                    registrationId = s;
+                    SharedPreUtils.getInstance().putString("registrationId",registrationId);
+                }
+            });
+        }
         //建议提前调用预登录接口，可以加快免密登录过程，提高用户体验
         SecVerify.preVerify(new OperationCallback<Void>() {
             @Override
             public void onComplete(Void data) {
+                Log.d(TAG, "onComplete: " + data);
                 //TODO处理成功的结果
             }
             @Override
             public void onFailure(VerifyException e) {
+                Log.d(TAG, "onFailure: " + e);
                 //TODO处理失败的结果
             }
         });
@@ -60,6 +80,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
 
     @Override
     public void directLogin() {
+        registrationId = SharedPreUtils.getInstance().getString("registrationId");
         SecVerify.verify(new VerifyCallback() {
             @Override
             public void onOtherLogin() {
@@ -75,7 +96,9 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
                 // 获取授权码成功，将token信息传给应用服务端，再由应用服务端进行登录验证，此功能需由开发者自行实现
                 Log.d(TAG, "onComplete: "+ data);
                 Log.d(TAG, "onComplete: "+ data.getToken());
-               Disposable disposable =  RemoteRepository.getInstance().userDirectLogin(data)
+                Log.d(TAG, "onComplete: registrationId " + registrationId);
+
+                Disposable disposable =  RemoteRepository.getInstance().userDirectLogin(data,registrationId)
                         .compose(RxUtils::toSimpleSingle)
                         .subscribe(new Consumer<DirectLoginResultBean>() {
                             @Override

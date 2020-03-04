@@ -27,6 +27,8 @@ import com.ldp.reader.utils.RxUtils;
 import com.ldp.reader.utils.SharedPreUtils;
 import com.ldp.reader.utils.StringUtils;
 import com.google.gson.Gson;
+import com.mob.pushsdk.MobPush;
+import com.mob.pushsdk.MobPushCallback;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -58,6 +60,8 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         }
         mView.finishRefresh(collBooks);
     }
+
+
 
     @Override
     public void createDownloadTask(CollBookBean collBookBean) {

@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ import com.ldp.reader.utils.ToastUtils;
 import com.ldp.reader.widget.adapter.WholeAdapter;
 import com.ldp.reader.widget.itemdecoration.DividerItemDecoration;
 import com.ldp.reader.widget.refresh.ScrollRefreshRecyclerView;
+import com.mob.pushsdk.MobPush;
+import com.mob.pushsdk.MobPushCallback;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
@@ -429,5 +432,23 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         rxPermissions = new RxPermissions(this);
         getPermission();
         mPresenter.refreshCollBooks();
+        getRegId();
+    }
+
+    String registrationId;
+    private void getRegId(){
+        Log.d(TAG, "preDirectLogin: registrationId");
+        registrationId = SharedPreUtils.getInstance().getString("registrationId");
+        Log.d(TAG, "onCallback: registrationId  " + registrationId);
+        if (TextUtils.isEmpty(registrationId)){
+            MobPush.getRegistrationId(new MobPushCallback<String>() {
+                @Override
+                public void onCallback(String s) {
+                    Log.d(TAG, "onCallback: registrationId  " + s);
+                    registrationId = s;
+                    SharedPreUtils.getInstance().putString("registrationId",registrationId);
+                }
+            });
+        }
     }
 }
