@@ -312,6 +312,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                         public void onClick(DialogInterface dialog, int which) {
                             boolean isSelected = cb.isSelected();
                             if (isSelected) {
+                                Log.e(TAG, "onClick:  正在删除中");
                                 ProgressDialog progressDialog = new ProgressDialog(getContext());
                                 progressDialog.setMessage("正在删除中");
                                 progressDialog.show();
@@ -320,18 +321,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                                 if (file.exists()) file.delete();
                                 BookRepository.getInstance().deleteCollBook(collBook);
                                 BookRepository.getInstance().deleteBookRecord(collBook.get_id());
-                                List<CollBookBean> collBookBeans = BookRepository.getInstance().getCollBooks();
-                                List<String> bookIds = new ArrayList<>();
-                                for (CollBookBean collBookBean:collBookBeans ) {
-                                    bookIds.add(collBookBean.get_id());
-                                }
-                                if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))){
-                                    mPresenter.setBookShelf(bookIds);
-                                }else {
-                                    String mobile  =  SharedPreUtils.getInstance().getString("userName");
-                                    String mobileToken =  SharedPreUtils.getInstance().getString("token");
-                                    mPresenter.setBookShelfByMobile(bookIds,mobile,mobileToken);
-                                }
+
                                 //从Adapter中删除
                                 mCollBookAdapter.removeItem(collBook);
                                 progressDialog.dismiss();
@@ -350,11 +340,29 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
             BookRepository.getInstance().deleteBookRecord(collBook.get_id());
             //从Adapter中删除
             mCollBookAdapter.removeItem(collBook);
+            Log.e(TAG, "deleteBook:1 ");
+            synBook();
             RxBus.getInstance().post(new DeleteTaskEvent(collBook));
+            Log.e(TAG, "deleteBook: 2");
         }
     }
 
+    private void  synBook(){
+        List<CollBookBean> collBookBeans = BookRepository.getInstance().getCollBooks();
+        List<String> bookIds = new ArrayList<>();
+        for (CollBookBean collBookBean:collBookBeans ) {
+            bookIds.add(collBookBean.get_id());
+        }
+        if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))){
+            mPresenter.setBookShelf(bookIds);
+        }else {
+            Log.e(TAG, "onClick:  正在删除中 同步书架");
 
+            String mobile  =  SharedPreUtils.getInstance().getString("userName");
+            String mobileToken =  SharedPreUtils.getInstance().getString("token");
+            mPresenter.setBookShelfByMobile(bookIds,mobile,mobileToken);
+        }
+    }
     /*******************************************************************8*/
 
     @Override
