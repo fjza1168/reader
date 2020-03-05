@@ -312,7 +312,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                         public void onClick(DialogInterface dialog, int which) {
                             boolean isSelected = cb.isSelected();
                             if (isSelected) {
-                                Log.e(TAG, "onClick:  正在删除中");
                                 ProgressDialog progressDialog = new ProgressDialog(getContext());
                                 progressDialog.setMessage("正在删除中");
                                 progressDialog.show();
@@ -340,10 +339,8 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
             BookRepository.getInstance().deleteBookRecord(collBook.get_id());
             //从Adapter中删除
             mCollBookAdapter.removeItem(collBook);
-            Log.e(TAG, "deleteBook:1 ");
             synBook();
             RxBus.getInstance().post(new DeleteTaskEvent(collBook));
-            Log.e(TAG, "deleteBook: 2");
         }
     }
 
