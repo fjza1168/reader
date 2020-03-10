@@ -354,7 +354,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
             mPresenter.setBookShelf(bookIds);
         }else {
             Log.e(TAG, "onClick:  正在删除中 同步书架");
-
             String mobile  =  SharedPreUtils.getInstance().getString("userName");
             String mobileToken =  SharedPreUtils.getInstance().getString("token");
             mPresenter.setBookShelfByMobile(bookIds,mobile,mobileToken);

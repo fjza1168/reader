@@ -335,8 +335,9 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                             oldCollBook.setUpdate(true);
 //       n                      showNotification(oldCollBook);
 //                            BookShelfPresenter.this.updateCategory(oldCollBook);
+                            updateCategory(oldCollBook);
                             Vibrator vibrator = (Vibrator) App.getContext().getSystemService(App.getContext().VIBRATOR_SERVICE);
-                            vibrator.vibrate(4000);
+                            vibrator.vibrate(400);
                         } else {
                             oldCollBook.setUpdate(false);
                         }
@@ -455,50 +456,37 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
 
     //更新每个CollBook的目录
     private void updateCategory(CollBookBean collBookBean) {
-        List<Single<BookDetailBeanInBiquge>> observablesInBiquge = new ArrayList<>();
         List<BookChapterBean> bookChapterBeans = new ArrayList<>();
-        Disposable disposable = RemoteRepository.getInstance()
-                .getChapterListByBiquge(collBookBean.get_id())
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(new Consumer<BookChapterPackageByBiquge>() {
+        Log.d(TAG, "loadCategory: "+collBookBean.get_id()+""+collBookBean);
+        Disposable disposable= RemoteRepository.getInstance()
+                .getBookFolder(collBookBean.get_id())
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Consumer<List<ChapterBean>>() {
                     @Override
-                    public void accept(BookChapterPackageByBiquge bookChapterPackageByBiquge) throws Exception {
-                        List<BookChapterPackageByBiquge.DataBean.ListBeanX.ListBean> listBeans = new ArrayList<>();
-                        for (BookChapterPackageByBiquge.DataBean.ListBeanX mlistBeanX : bookChapterPackageByBiquge.getData().getList()) {
-                            if (null != mlistBeanX && null != mlistBeanX.getList()) {
-                                listBeans.addAll(mlistBeanX.getList());
-                            }
+                    public void accept(List<ChapterBean> chapterBeans) throws Exception {
+                        for (ChapterBean chapterBean : chapterBeans) {
+                            BookChapterBean bookChapterBeanTemp = new BookChapterBean();
+                            bookChapterBeanTemp.setLink(chapterBean.getChapterId() + "");
+                            bookChapterBeanTemp.setTitle(chapterBean.getTitle());
+                            bookChapterBeanTemp.setValidInZhuishu(false);
+                            bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
+                            Log.d(TAG, "+章节名  " + chapterBean.getTitle());
+                            bookChapterBeanTemp.setBookId(collBookBean.get_id());
+                            bookChapterBeans.add(bookChapterBeanTemp);
                         }
-                        for (int i = 0; i <=listBeans.size() - 1; i++) {
-                            if (null != listBeans.get(i)) {
-                                BookChapterBean bookChapterBeanTemp = new BookChapterBean();
-                                bookChapterBeanTemp.setLink("BQG" + String.valueOf(listBeans.get(i).getId()));
-                                bookChapterBeanTemp.setTitle(listBeans.get(i).getName());
-                                bookChapterBeanTemp.setValidInZhuishu(false);
-                                bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
-                                Log.d(TAG, "+章节名  " + i + " " + listBeans.get(i).getName());
-                                bookChapterBeanTemp.setBookId(collBookBean.get_id());
-                                bookChapterBeans.add(bookChapterBeanTemp);
-                            }
-                        }
-//                        BookRepository.getInstance()
-//                                .saveBookChaptersWithAsync(bookChapterBeans);
-                        //设置目录
                         collBookBean.setBookChapters(bookChapterBeans);
+                        Log.d(TAG, "accept: " + bookChapterBeans);
                         //存储收藏
                         BookRepository.getInstance()
                                 .saveCollBookWithAsync(collBookBean);
-//                        mView.succeedToBookShelf();
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.e(TAG, throwable.getCause() + "   " + throwable.getMessage());
-//                        mView.errorToBookShelf();
+
                     }
                 });
-        addDisposable(disposable);
     }
 
 }

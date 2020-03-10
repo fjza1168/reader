@@ -34,7 +34,7 @@ public class Constant {
     public static final String IMG_BASE_URL_IN_BIQUGE = "https://imgapi.jiaston.com/BookFiles/BookImages/";
 
     public static final String API_BASE_URL_OWN= "http://47.98.166.103";
-//    public static final String API_BASE_URL_OWN= "http://192.168.0.102";
+//    public static final String API_BASE_URL_OWN= "http://192.168.0.105";
 
 
 
