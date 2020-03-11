@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 import com.ldp.reader.R;
 import com.ldp.reader.utils.StatusBarCompat;
+import com.ldp.reader.utils.SystemBarUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -81,18 +82,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         Window window = getWindow();
         View decorView = window.getDecorView();
-
+//
 //        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 //                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
-//        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.TRANSPARENT);
-
-        decorView.setSystemUiVisibility(uiOptions);
+////        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+////
+////        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+////                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(Color.TRANSPARENT);
+//
+//        decorView.setSystemUiVisibility(uiOptions);
+        SystemBarUtils.showStableStatusBar(this);
+        SystemBarUtils.transparentStatusBar(this);
         initToolbar();
         initWidget();
         initClick();

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.ldp.reader.App;
@@ -137,7 +140,9 @@ public class MainActivity extends BaseTabActivity implements ViewPager.OnPageCha
         super.initWidget();
         //性别选择框
 //        showSexChooseDialog();
-        SystemBarUtils.expandStatusBar(this);
+//        SystemBarUtils.expandStatusBar(this);
+        SystemBarUtils.showStableStatusBar(this);
+        SystemBarUtils.transparentStatusBar(this);
     }
 
     private void showSexChooseDialog() {
@@ -299,6 +304,13 @@ public class MainActivity extends BaseTabActivity implements ViewPager.OnPageCha
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+//                int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//        Window window = getWindow();
+//        View decorView = window.getDecorView();
+//        decorView.setSystemUiVisibility(uiOptions);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(Color.TRANSPARENT);
     }
 
     /******************inner class*****************/

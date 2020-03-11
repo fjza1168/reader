@@ -21,6 +21,7 @@ import com.ldp.reader.presenter.contract.SearchContract;
 import com.ldp.reader.ui.adapter.KeyWordAdapter;
 import com.ldp.reader.ui.adapter.SearchBookAdapter;
 import com.ldp.reader.ui.base.BaseMVPActivity;
+import com.ldp.reader.utils.SystemBarUtils;
 import com.ldp.reader.widget.RefreshLayout;
 import com.ldp.reader.widget.itemdecoration.DividerItemDecoration;
 
@@ -224,6 +225,8 @@ RefreshLayout mRlRefresh;
     @Override
     protected void processLogic() {
         super.processLogic();
+        SystemBarUtils.showStableStatusBar(this);
+        SystemBarUtils.transparentStatusBar(this);
         //默认隐藏
         mRlRefresh.setVisibility(View.GONE);
         //获取热词

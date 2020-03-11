@@ -27,39 +27,7 @@ public class SectionHolder extends ViewHolderImpl<SectionBean>{
     @Override
     public void onBind(SectionBean value, int pos) {
         mIvIcon.setImageResource(value.getDrawableId());
-        mIvIcon.setOnClickListener(view -> {
-            float curTranslationY = mIvIcon.getTranslationY();
-            float curTranslationX = mIvIcon.getTranslationX();
-            ObjectAnimator animatorX
-                    = ObjectAnimator.ofFloat(mIvIcon, "translationY",
-                    curTranslationY, curTranslationY + 100f);
-            ObjectAnimator animatorY
-                    = ObjectAnimator.ofFloat(mIvIcon, "translationX",
-                    curTranslationX, curTranslationY + 100f);
-
-            animatorX.setDuration(2000);
-            animatorY.setDuration(2000);
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(animatorX,animatorY);
-            animatorSet.start();
-        });
         mTvName.setText(value.getName());
-        mTvName.setOnClickListener(view -> {
-            float curTranslationY = mTvName.getTranslationY();
-            float curTranslationX = mTvName.getTranslationX();
-            ObjectAnimator animatorX
-                    = ObjectAnimator.ofFloat(mTvName, "translationY",
-                    curTranslationY, curTranslationY + 100f);
-            ObjectAnimator animatorY
-                    = ObjectAnimator.ofFloat(mTvName, "translationX",
-                    curTranslationX, curTranslationY + 100f);
-
-            animatorX.setDuration(2000);
-            animatorY.setDuration(2000);
-            AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(animatorX,animatorY);
-            animatorSet.start();
-        });
     }
 
     @Override
