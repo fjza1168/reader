@@ -45,6 +45,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -393,8 +394,14 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     @Override
     public void finishUpdate() {
         //重新从数据库中获取数据
-        mCollBookAdapter.refreshItems(BookRepository
-                .getInstance().getCollBooks());
+        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mCollBookAdapter.refreshItems(BookRepository
+                        .getInstance().getCollBooks());
+            }
+        });
+
     }
 
     @Override

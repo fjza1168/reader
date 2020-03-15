@@ -341,6 +341,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                         } else {
                             oldCollBook.setUpdate(false);
                         }
+                        oldCollBook.setUpdated(StringUtils.dateConvert(StringUtils.dateConvert(bookDetailBeanInOwn.getUpdateTime(),Constant.FORMAT_BOOK_DATE) ,Constant.FORMAT_BOOK_DATE) );
                         newCollBooksMerge.add(oldCollBook);
                         Log.d(TAG, "+检查更新");
                     }
@@ -352,6 +353,8 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                     BookRepository.getInstance().saveCollBooks(newCollBooksMerge);
 //                                Log.d("+?5缓存", "运行");//
                     mView.complete();
+                    mView.finishUpdate();
+
                 });
         addDisposable(chaptersDispoable);
 

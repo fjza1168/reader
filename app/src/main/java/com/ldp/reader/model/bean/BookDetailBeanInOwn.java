@@ -1,5 +1,8 @@
 package com.ldp.reader.model.bean;
 
+import com.ldp.reader.utils.Constant;
+import com.ldp.reader.utils.StringUtils;
+
 import java.util.List;
 
 public class BookDetailBeanInOwn {
@@ -20,6 +23,7 @@ public class BookDetailBeanInOwn {
     private String title;
     private String author;
     private String lastChapter;
+    private long updateTime;
     private String desc;
     private List<SourcesBean> sources;
 
@@ -86,7 +90,13 @@ public class BookDetailBeanInOwn {
     public void setLastChapter(String lastChapter) {
         this.lastChapter = lastChapter;
     }
+    public long getUpdateTime() {
+        return updateTime;
+    }
 
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
     public static class SourcesBean {
         /**
          * bookId : 21771508
@@ -180,7 +190,7 @@ public class BookDetailBeanInOwn {
         bean.setBookStatus("连载中");
 //        bean.setLatelyFollower(getLatelyFollower());
 //        bean.setRetentionRatio(Double.parseDouble(getRetentionRatio()));
-        bean.setUpdated("2019年11月16日19:34:08");
+        bean.setUpdated(StringUtils.dateConvert(updateTime, Constant.FORMAT_BOOK_DATE) );
         bean.setChaptersCount(100);
         bean.setLastChapter(lastChapter);
         return bean;
