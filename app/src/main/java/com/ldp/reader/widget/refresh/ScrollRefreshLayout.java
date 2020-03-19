@@ -58,8 +58,8 @@ public abstract class ScrollRefreshLayout extends SwipeRefreshLayout {
 
     private void initAnim(){
         if (mTipOpenAnim == null || mTopCloseAnim == null){
-            mTipOpenAnim = AnimationUtils.loadAnimation(mContext,R.anim.slide_top_in);
-            mTopCloseAnim = AnimationUtils.loadAnimation(mContext,R.anim.slide_top_out);
+            mTipOpenAnim = AnimationUtils.loadAnimation(mContext,R.anim.slide_left_in);
+            mTopCloseAnim = AnimationUtils.loadAnimation(mContext,R.anim.slide_right_out);
 
             mTipOpenAnim.setFillAfter(true);
             mTopCloseAnim.setFillAfter(true);

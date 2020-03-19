@@ -35,7 +35,7 @@ public abstract class BaseTabActivity extends BaseActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-//        setUpTabLayout();
+        setUpTabLayout();
     }
 
     private void setUpTabLayout(){

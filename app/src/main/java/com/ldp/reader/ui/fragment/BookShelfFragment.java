@@ -349,7 +349,9 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         List<CollBookBean> collBookBeans = BookRepository.getInstance().getCollBooks();
         List<String> bookIds = new ArrayList<>();
         for (CollBookBean collBookBean:collBookBeans ) {
-            bookIds.add(collBookBean.get_id());
+            if(!collBookBean.isLocal()){
+                bookIds.add(collBookBean.get_id());
+            }
         }
         if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))){
             mPresenter.setBookShelf(bookIds);

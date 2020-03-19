@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,7 @@ import com.ldp.reader.App;
 import com.ldp.reader.R;
 import com.ldp.reader.RxBus;
 import com.ldp.reader.event.BookSyncEvent;
+import com.ldp.reader.ui.base.BaseActivity;
 import com.ldp.reader.ui.base.BaseTabActivity;
 import com.ldp.reader.ui.dialog.SexChooseDialog;
 import com.ldp.reader.ui.fragment.BookShelfFragment;
@@ -52,7 +54,7 @@ import butterknife.ButterKnife;
 /**
  * @author ldp
  */
-public class MainActivity extends BaseTabActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     /*************Constant**********/
     private static final int WAIT_INTERVAL = 2000;
@@ -66,6 +68,11 @@ public class MainActivity extends BaseTabActivity implements ViewPager.OnPageCha
     private final ArrayList<Fragment> mFragmentList = new ArrayList<>();
     @BindView(R.id.st_main)
     ScrollTab stMain;
+    /**************View***************/
+    @BindView(R.id.tab_tl_indicator)
+    protected TabLayout mTlIndicator;
+    @BindView(R.id.tab_vp)
+    protected ViewPager mVp;
     private List<String> mTitleList;
     private PermissionsChecker mPermissionsChecker;
     /*****************Params*********************/
@@ -89,7 +96,7 @@ public class MainActivity extends BaseTabActivity implements ViewPager.OnPageCha
     }
 
 
-    @Override
+
     protected List<Fragment> createTabFragments() {
         initFragment();
         return mFragmentList;
@@ -129,7 +136,7 @@ public class MainActivity extends BaseTabActivity implements ViewPager.OnPageCha
     }
 
 
-    @Override
+
     protected List<String> createTabTitles() {
         String[] titles = getResources().getStringArray(R.array.nb_fragment_title);
         return Arrays.asList(titles);
