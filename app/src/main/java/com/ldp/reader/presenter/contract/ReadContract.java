@@ -20,6 +20,9 @@ public interface ReadContract extends BaseContract{
     interface Presenter extends BaseContract.BasePresenter<View>{
         void loadCategory(String bookId);
         void loadChapter(String bookId,List<TxtChapter> bookChapterList);
+        void changeChapterSource(String bookId, TxtChapter bookChapter ,int sourceIndex);
+
+
         void loadCategoryInBiquge(String bookId);
 
     }

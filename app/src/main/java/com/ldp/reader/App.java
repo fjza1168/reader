@@ -9,8 +9,10 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.ldp.reader.utils.EncryptUtils;
-import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
+
+
+import leakcanary.LeakCanary;
 
 /**
  * Created by ldp on 17-4-15.
@@ -27,11 +29,8 @@ public class App extends Application {
         sInstance = this;
         CrashReport.initCrashReport(getApplicationContext(), "ab86f05cf4", true);
 //        startService(new Intent(getContext(), DownloadService.class));
-
         // 初始化内存分析工具
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
+
         getCertificateMD5();
     }
 

@@ -56,7 +56,7 @@
                 android:theme="@style/Theme.ToolBar.Menu">
 
                 <RelativeLayout
-                    android:layout_width="120dp"
+                    android:layout_width="170dp"
                     android:layout_height="50dp"
                     android:layout_gravity="right"
                     android:background="@color/nb.read.menu.bg">
@@ -72,6 +72,11 @@
                         style="@style/NB.Theme.TextAppearance.Read.TopMenu"
                         android:layout_toLeftOf="@id/read_tv_brief"
                         android:text="@string/nb.read.community" />
+                    <TextView
+                        android:id="@+id/tv_change_source"
+                        style="@style/NB.Theme.TextAppearance.Read.TopMenu"
+                        android:layout_toLeftOf="@id/read_tv_community"
+                        android:text="换源" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>

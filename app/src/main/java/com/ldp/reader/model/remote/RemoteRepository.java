@@ -110,8 +110,8 @@ public class RemoteRepository {
         return mBookApiOwn.getBookFolder(bookId);
     }
 
-    public Single<ContentBean> getBookContent(String bookId,String chapterId) {
-        return mBookApiOwn.getBookContent(bookId,chapterId);
+    public Single<ContentBean> getBookContent(String bookId,String chapterId ,int sourceIndex) {
+        return mBookApiOwn.getBookContent(bookId,chapterId,sourceIndex);
     }
 
     public Single<LoginResultBean> userLogin(String userNameInput, String passwordInput) {

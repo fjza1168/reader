@@ -61,7 +61,7 @@ public interface BookApiOwn {
      * @return
      */
     @GET("/getBookContent")
-    Single<ContentBean> getBookContent(@Query("bookId") String bookId, @Query("chapterId") String chapterId);
+    Single<ContentBean> getBookContent(@Query("bookId") String bookId, @Query("chapterId") String chapterId , @Query("sourceIndex") int sourceIndex);
 
     /**
      * 登录

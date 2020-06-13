@@ -85,7 +85,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     private static final int WHAT_CATEGORY = 1;
     private static final int WHAT_CHAPTER = 2;
-
+    private int sourceIndex = 0;
 
     @BindView(R.id.read_dl_slide)
     DrawerLayout mDlSlide;
@@ -96,6 +96,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     TextView mTvCommunity;
     @BindView(R.id.read_tv_brief)
     TextView mTvBrief;
+    @BindView(R.id.tv_change_source)
+    TextView tvChangeSource;
+
     /***************content_view******************/
     @BindView(R.id.read_pv_page)
     PageView mPvPage;
@@ -447,6 +450,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 }
         );
 
+
         mSbChapterProgress.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     @Override
@@ -533,6 +537,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 (v) -> {
                     if (mPageLoader.skipPreChapter()) {
                         mCategoryAdapter.setChapter(mPageLoader.getChapterPos());
+                        sourceIndex = 0;
                     }
                 }
         );
@@ -541,6 +546,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 (v) -> {
                     if (mPageLoader.skipNextChapter()) {
                         mCategoryAdapter.setChapter(mPageLoader.getChapterPos());
+                        sourceIndex = 0;
                     }
                 }
         );
@@ -567,6 +573,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     startActivity(intent);
                 }
         );
+
+        tvChangeSource.setOnClickListener(
+                (v) -> {
+                    mPresenter.changeChapterSource(mBookId, mCategoryAdapter.getItem(mPageLoader.getChapterPos()), sourceIndex);
+                    sourceIndex++;
+                }
+        );
+
 
         mSettingDialog.setOnDismissListener(
                 dialog -> hideSystemBar()

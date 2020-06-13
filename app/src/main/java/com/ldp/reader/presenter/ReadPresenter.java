@@ -118,6 +118,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                         mView.errorChapter();
                     }
                 });
+        addDisposable(disposable);
 
     }
 
@@ -129,12 +130,12 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
         List<BookChapterBean> bookChapterBeans = bean.getBookChapterList();
         bookIdInBiquge = bean.getBookIdInBiquge();
         if (null == bookIdInBiquge || bookIdInBiquge.isEmpty()) {
-            mView.showCategory(bookChapterBeans,bookId,true);
+            mView.showCategory(bookChapterBeans, bookId, true);
             return;
         }
         IdZhuishuToBiquge.put(bookId, bookIdInBiquge);
         Log.d("+笔趣阁ID", "bookIdInBiquge" + bookIdInBiquge);
-        RemoteRepository.getInstance()
+        Disposable disposable = RemoteRepository.getInstance()
                 .getChapterListByBiquge(bookIdInBiquge)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -148,10 +149,8 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                                 listBeans.addAll(mlistBeanX.getList());
                             }
                         }
-                        Log.d("+追书章节总数", "    追书:" + bookChapterBeans.size() +"笔趣阁" + listBeans.size());
+                        Log.d("+追书章节总数", "    追书:" + bookChapterBeans.size() + "笔趣阁" + listBeans.size());
 //                        Log.d("+笔趣阁章节最新/追书章节最新", "笔趣阁:" + listBeans.get(listBeans.size() - 1).getName() + "    追书:" +bookChapterBeans.get( bookChapterBeans.size()).getTitle());
-
-
 
 
 //                        if(bookChapterBeans.size() < listBeans.size()||true){
@@ -188,9 +187,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
 //                        }
 
 
-
-
-                        if(bookChapterBeans.size() < listBeans.size()||true){
+                        if (bookChapterBeans.size() < listBeans.size() || true) {
                             String lastTitleInZhuishu = bookChapterBeans.get(bookChapterBeans.size() - 1).getTitle();
 
                             int latestPos = listBeans.size() - 1;
@@ -200,30 +197,30 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                                 if (null == listBeans.get(i)) {
                                     continue;
                                 }
-                                if(listBeans.get(i).getName().contains(lastTitleInZhuishu)||lastTitleInZhuishu.contains(listBeans.get(i).getName())){
-                                    Log.d(TAG,"直接包含,不用计算相似度");
+                                if (listBeans.get(i).getName().contains(lastTitleInZhuishu) || lastTitleInZhuishu.contains(listBeans.get(i).getName())) {
+                                    Log.d(TAG, "直接包含,不用计算相似度");
                                     latestPos = i;
                                     break;
                                 }
-                                double titleSimilarity  = SimilarityCharacterUtils.getSimilarity(listBeans.get(i).getName(),lastTitleInZhuishu);
-                                Log.d(TAG,"titleSimilarity : "+titleSimilarity +  "    " + lastTitleInZhuishu  + "    " + listBeans.get(i).getName() + " positionInBiquge  " + i);
+                                double titleSimilarity = SimilarityCharacterUtils.getSimilarity(listBeans.get(i).getName(), lastTitleInZhuishu);
+                                Log.d(TAG, "titleSimilarity : " + titleSimilarity + "    " + lastTitleInZhuishu + "    " + listBeans.get(i).getName() + " positionInBiquge  " + i);
 
-                                if(titleSimilarity >highestSimilarity){
+                                if (titleSimilarity > highestSimilarity) {
                                     highestSimilarity = titleSimilarity;
                                     latestPos = i;
                                 }
                             }
 
-                            Log.d(TAG,"highestSimilarity:  " + highestSimilarity);
+                            Log.d(TAG, "highestSimilarity:  " + highestSimilarity);
 
                             for (int i = latestPos + 1; i < listBeans.size() - 1; i++) {
                                 if (null != listBeans.get(i)) {
 
                                     BookChapterBean bookChapterBeanTemp = new BookChapterBean();
-                                    bookChapterBeanTemp.setLink("BQG"+String.valueOf(listBeans.get(i).getId()));
+                                    bookChapterBeanTemp.setLink("BQG" + String.valueOf(listBeans.get(i).getId()));
                                     bookChapterBeanTemp.setTitle(listBeans.get(i).getName());
                                     bookChapterBeanTemp.setValidInZhuishu(false);
-                                    Log.d(TAG,"+多出的章节名  "+i+ " "+listBeans.get(i).getName());
+                                    Log.d(TAG, "+多出的章节名  " + i + " " + listBeans.get(i).getName());
                                     bookChapterBeans.add(bookChapterBeanTemp);
 
                                 }
@@ -231,12 +228,10 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                         }
 
 
-
-
-                        mView.showCategory(bookChapterBeans,bookId,true);
+                        mView.showCategory(bookChapterBeans, bookId, true);
                     }
                 });
-
+        addDisposable(disposable);
     }
 
 
@@ -314,13 +309,6 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
     @Override
     public synchronized void loadChapter(String bookId, List<TxtChapter> bookChapters) {
 
-//        if(firstTime || System.currentTimeMillis()-lastTime>2000){
-//            lastTime =  System.currentTimeMillis();
-//            firstTime = false;
-//        }else{
-//            Log.e(TAG, "loadChapter被拦截");
-//            return;
-//        }
         int size = bookChapters.size();
         Log.e(TAG, "loadChapter  列表大小" + size + Arrays.asList(bookChapters).toString());
 
@@ -342,58 +330,12 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
             CollBookBean bean = BookRepository.getInstance().getCollBook(bookId);
             bookIdInBiquge = bean.get_id();
             Log.d("+收到的章节笔趣阁Id", bookIdInBiquge);
-//            Single<BookChapterBeanByBiquge> bookChapterBeanByBiqugeSingle = RemoteRepository.getInstance()
-//                    .getChapterByBiquge(bookIdInBiquge, pureLink);
-
             Single<ContentBean> bookChapterBeanByBiqugeSingle = RemoteRepository.getInstance()
-                    .getBookContent(bookIdInBiquge, pureLink);
+                    .getBookContent(bookIdInBiquge, pureLink ,0 );
             Log.d("+收到的章节ID", bookChapter.getLink());
             bookChapterSBeanByBiquge.add(bookChapterBeanByBiqugeSingle);
             titlesInBiquge.add(bookChapter.getTitle());
         }
-
-//        Single.concat(chapterInfos)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        new Subscriber<ChapterInfoBean>() {
-//                            String title = titles.poll();
-//
-//                            @Override
-//                            public void onSubscribe(Subscription s) {
-//                                s.request(Integer.MAX_VALUE);
-//                                mChapterSub = s;
-//                            }
-//
-//                            @Override
-//                            public void onNext(ChapterInfoBean chapterInfoBean) {
-//                                //存储数据
-//                                BookRepository.getInstance().saveChapterInfo(
-//                                        bookId, title, chapterInfoBean.getBody()
-//                                );
-//                                mView.finishChapter();
-//                                //将获取到的数据进行存储
-//                                title = titles.poll();
-//
-//
-//                                Log.e("+chapterBody", "title" + chapterInfoBean.getTitle() + titles + " " + chapterInfoBean.getBody());
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable t) {
-//                                //只有第一个加载失败才会调用errorChapter
-//                                if (bookChapters.get(0).getTitle().equals(title)) {
-//                                    mView.errorChapter();
-//                                }
-//                                LogUtils.e(t);
-//                            }
-//
-//                            @Override
-//                            public void onComplete() {
-//                            }
-//                        }
-//                );
-
 
         Single.concat(bookChapterSBeanByBiquge)
                 .subscribeOn(Schedulers.io())
@@ -432,7 +374,29 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
 
                     }
                 });
+    }
 
+
+    @Override
+    public synchronized void changeChapterSource(String bookId, TxtChapter bookChapter ,int sourceIndex) {
+        String pureLink = bookChapter.getLink();
+        CollBookBean bean = BookRepository.getInstance().getCollBook(bookId);
+        bookIdInBiquge = bean.get_id();
+        Disposable disposable = RemoteRepository.getInstance()
+                .getBookContent(bookIdInBiquge, pureLink ,sourceIndex)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Consumer<ContentBean>() {
+                    @Override
+                    public void accept(ContentBean contentBean) throws Exception {
+                       mView.finishChapter();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.errorChapter();
+                    }
+                });
+        addDisposable(disposable);
     }
 
 

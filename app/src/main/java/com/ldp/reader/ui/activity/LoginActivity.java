@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ldp.reader.R;
+import com.ldp.reader.RxBus;
+import com.ldp.reader.event.BookSyncEvent;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
 import com.ldp.reader.presenter.LoginPresenter;
@@ -127,7 +129,9 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
              SharedPreUtils.getInstance().putString("token", loginResultBean.getRes().getMobileToken());
             SharedPreUtils.getInstance().putString("userName", loginResultBean.getRes().getPhone());
             ToastUtils.show("登录成功");
-            finish();
+             RxBus.getInstance().post(new BookSyncEvent());
+
+             finish();
         }else {
              ToastUtils.show("登录失败" + loginResultBean.getError());
          }

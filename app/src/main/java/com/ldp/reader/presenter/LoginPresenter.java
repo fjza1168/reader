@@ -3,6 +3,8 @@ package com.ldp.reader.presenter;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ldp.reader.RxBus;
+import com.ldp.reader.event.BookSyncEvent;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
 import com.ldp.reader.model.remote.RemoteRepository;
@@ -103,7 +105,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
                         .subscribe(new Consumer<DirectLoginResultBean>() {
                             @Override
                             public void accept(DirectLoginResultBean directLoginResultBean) throws Exception {
-                               mView.finishDirectLogin(directLoginResultBean);
+                                mView.finishDirectLogin(directLoginResultBean);
                             }
                         }, new Consumer<Throwable>() {
                             @Override
