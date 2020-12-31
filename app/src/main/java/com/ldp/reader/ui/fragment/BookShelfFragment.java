@@ -453,6 +453,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         Log.d(TAG, "preDirectLogin: registrationId");
         registrationId = SharedPreUtils.getInstance().getString("registrationId");
         Log.d(TAG, "onCallback: registrationId  " + registrationId);
+        MobPush.setShowBadge(true);
         if (TextUtils.isEmpty(registrationId)){
             MobPush.getRegistrationId(new MobPushCallback<String>() {
                 @Override

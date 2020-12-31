@@ -34,7 +34,6 @@ MobSDK {
 }
 android {
     compileSdkVersion 27
-
     signingConfigs {
         release {
             storeFile file('../reader.jks')
@@ -120,6 +119,10 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     // ImageLoader
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+//    implementation "com.github.bumptech.glide:okhttp3-integration:$rootProject.glideVersion"// 新增
+//    implementation "com.github.bumptech.glide:annotations:$rootProject.glideVersion" // 新增
+//    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
     // ORM Database
     implementation "org.greenrobot:greendao:$rootProject.greendaoVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
