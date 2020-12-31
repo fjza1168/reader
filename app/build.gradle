@@ -34,6 +34,22 @@ MobSDK {
 }
 android {
     compileSdkVersion 27
+
+    signingConfigs {
+        release {
+            storeFile file('../reader.jks')
+            storePassword "general*PASSWORD"
+            keyAlias "reader"
+            keyPassword "general*PASSWORD"
+        }
+        debug {
+            storeFile file('../reader.jks')
+            storePassword "general*PASSWORD"
+            keyAlias "reader"
+            keyPassword "general*PASSWORD"
+        }
+    }
+
     defaultConfig {
         applicationId "com.ldp.reader"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -45,8 +61,18 @@ android {
     }
     buildTypes {
         release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //混淆
             minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {

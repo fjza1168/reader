@@ -12,7 +12,6 @@ import com.ldp.reader.utils.EncryptUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 
 
-import leakcanary.LeakCanary;
 
 /**
  * Created by ldp on 17-4-15.

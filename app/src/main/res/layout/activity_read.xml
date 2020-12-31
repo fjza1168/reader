@@ -76,7 +76,7 @@
                         android:id="@+id/tv_change_source"
                         style="@style/NB.Theme.TextAppearance.Read.TopMenu"
                         android:layout_toLeftOf="@id/read_tv_community"
-                        android:text="换源" />
+                        android:text="刷新" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>

@@ -576,8 +576,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
         tvChangeSource.setOnClickListener(
                 (v) -> {
-                    mPresenter.changeChapterSource(mBookId, mCategoryAdapter.getItem(mPageLoader.getChapterPos()), sourceIndex);
                     sourceIndex++;
+                    mPresenter.refreshChapter(mBookId, mCategoryAdapter.getItem(mPageLoader.getChapterPos()), sourceIndex);
                 }
         );
 
@@ -740,16 +740,16 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @DebugLog
     @Override
-    public void finishChapter() {
-        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
+    public void finishChapter(boolean isRefresh) {
+        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING || isRefresh) {
             mHandler.sendEmptyMessage(WHAT_CHAPTER);
             Log.d("+finishChapter","加载");
         }
         // 当完成章节的时候，刷新列表
         mCategoryAdapter.notifyDataSetChanged();
         Log.d("+finishChapter","完成");
-
     }
+
 
     @Override
     public void errorChapter() {

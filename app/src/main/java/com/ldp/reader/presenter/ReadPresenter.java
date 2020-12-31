@@ -355,7 +355,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                                 bookId, titleInBiquge, contentBean.getContent()
                         );
                         Log.e("+chapterBody", "title" + titleInBiquge + titlesInBiquge + " " +contentBean.getContent());
-                        mView.finishChapter();
+                        mView.finishChapter(false);
                         //将获取到的数据进行存储
                         titleInBiquge = titlesInBiquge.poll();
                     }
@@ -378,7 +378,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
 
 
     @Override
-    public synchronized void changeChapterSource(String bookId, TxtChapter bookChapter ,int sourceIndex) {
+    public synchronized void refreshChapter(String bookId, TxtChapter bookChapter , int sourceIndex) {
         String pureLink = bookChapter.getLink();
         CollBookBean bean = BookRepository.getInstance().getCollBook(bookId);
         bookIdInBiquge = bean.get_id();
@@ -388,7 +388,10 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                 .subscribe(new Consumer<ContentBean>() {
                     @Override
                     public void accept(ContentBean contentBean) throws Exception {
-                       mView.finishChapter();
+                        //存储数据
+                        BookRepository.getInstance().saveChapterInfo(
+                                bookId, bookChapter.getTitle(), contentBean.getContent());
+                       mView.finishChapter(true);
                     }
                 }, new Consumer<Throwable>() {
                     @Override

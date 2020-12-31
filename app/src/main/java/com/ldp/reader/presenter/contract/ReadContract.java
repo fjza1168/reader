@@ -6,6 +6,8 @@ import com.ldp.reader.widget.page.TxtChapter;
 
 import java.util.List;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by ldp on 17-5-16.
  */
@@ -13,14 +15,15 @@ import java.util.List;
 public interface ReadContract extends BaseContract{
     interface View extends BaseContract.BaseView {
         void showCategory(List<BookChapterBean> bookChapterList,String bookId ,boolean isBiqugeLoaded);
-        void finishChapter();
+        void finishChapter(boolean isRefresh);
+
         void errorChapter();
     }
 
     interface Presenter extends BaseContract.BasePresenter<View>{
         void loadCategory(String bookId);
         void loadChapter(String bookId,List<TxtChapter> bookChapterList);
-        void changeChapterSource(String bookId, TxtChapter bookChapter ,int sourceIndex);
+        void refreshChapter(String bookId, TxtChapter bookChapter , int sourceIndex);
 
 
         void loadCategoryInBiquge(String bookId);
