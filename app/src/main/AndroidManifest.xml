@@ -31,7 +31,8 @@
         <activity
             android:name="com.ldp.reader.ui.activity.SplashActivity"
             android:theme="@style/SplashTheme" />
-        <activity android:name="com.ldp.reader.ui.activity.MainActivity">
+        <activity android:name="com.ldp.reader.ui.activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,7 +50,8 @@
         <activity android:name="com.ldp.reader.ui.activity.OtherBillBookActivity" />
         <activity android:name="com.ldp.reader.ui.activity.BookDetailActivity" />
         <activity android:name="com.ldp.reader.ui.activity.DownloadActivity" />
-        <activity android:name="com.ldp.reader.ui.activity.ReadActivity" />
+        <activity android:name="com.ldp.reader.ui.activity.ReadActivity"
+            android:launchMode="singleTask"/>
         <activity android:name="com.ldp.reader.ui.activity.FileSystemActivity" />
         <activity android:name="com.ldp.reader.ui.activity.CommunityActivity" />
         <activity android:name="com.ldp.reader.ui.activity.MoreSettingActivity" />

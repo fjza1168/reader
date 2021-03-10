@@ -17,9 +17,11 @@ import com.mob.pushsdk.MobPushCallback;
 import com.mob.secverify.OperationCallback;
 import com.mob.secverify.SecVerify;
 import com.mob.secverify.VerifyCallback;
+import com.mob.secverify.common.exception.VerifyException;
 import com.mob.secverify.datatype.LoginResult;
 import com.mob.secverify.datatype.VerifyResult;
-import com.mob.secverify.exception.VerifyException;
+
+
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -110,7 +112,8 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                Log.e(TAG, "accept: " +throwable.getMessage());
+
+                                Log.e(TAG, "accept: " +throwable.getMessage() + throwable.getCause());
                                 mView.showError();
                             }
                         });

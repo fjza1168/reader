@@ -32,6 +32,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.BarUtils;
 import com.ldp.reader.R;
 import com.ldp.reader.model.bean.BookChapterBean;
 import com.ldp.reader.model.bean.CollBookBean;
@@ -48,7 +49,7 @@ import com.ldp.reader.utils.LogUtils;
 import com.ldp.reader.utils.RxUtils;
 import com.ldp.reader.utils.ScreenUtils;
 import com.ldp.reader.utils.StringUtils;
-import com.ldp.reader.utils.SystemBarUtils;
+
 import com.ldp.reader.widget.page.PageLoader;
 import com.ldp.reader.widget.page.PageView;
 import com.ldp.reader.widget.page.TxtChapter;
@@ -260,7 +261,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         //设置标题
         toolbar.setTitle(mCollBook.getTitle());
         //半透明化StatusBar
-        SystemBarUtils.transparentStatusBar(this);
+//        SystemBarUtils.transparentStatusBar(this);
+        BarUtils.transparentStatusBar(this);
 
     }
 
@@ -325,7 +327,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     private void initBottomMenu() {
         //判断是否全屏
-        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
         if (ReadSettingManager.getInstance().isFullScreen()) {
             //还需要设置mBottomMenu的底部高度
 //            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mLlBottomMenu.getLayoutParams();
@@ -487,7 +489,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             @Override
             public void center() {
-                SystemBarUtils.setStableNavBarColor(ReadActivity.this,getResources().getColor(R.color.nb_read_menu_bg));
+//                SystemBarUtils.setStableNavBarColor(ReadActivity.this,getResources().getColor(R.color.nb_read_menu_bg));
                 toggleMenu(true);
             }
 
@@ -526,7 +528,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         );
         mTvSetting.setOnClickListener(
                 (v) -> {
-                    SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//                    SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
 
                     toggleMenu(false);
                     mSettingDialog.show();
@@ -595,7 +597,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private boolean hideReadMenu() {
         hideSystemBar();
         if (mAblTopMenu.getVisibility() == VISIBLE) {
-            SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+
+//            SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
             toggleMenu(true);
             return true;
         } else if (mSettingDialog.isShowing()) {
@@ -608,26 +611,26 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private void showSystemBar() {
         Log.d(TAG, "showSystemBar:");
         //显示
-        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
 
 //        SystemBarUtils.showUnStableStatusBar(this);
 //        SystemBarUtils.showUnStableNavBar(this);
         if (isFullScreen) {
 //            SystemBarUtils.showUnStableNavBar(this);
-            SystemBarUtils.showStableNavBar(this);
-            SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//            SystemBarUtils.showStableNavBar(this);
+//            SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
 
         }
     }
 
     private void hideSystemBar() {
-        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
 
         //隐藏
-        SystemBarUtils.hideStableStatusBar(this);
-        SystemBarUtils.hideStableNavBar(this);
+//        SystemBarUtils.hideStableStatusBar(this);
+//        SystemBarUtils.hideStableNavBar(this);
         if (isFullScreen) {
-            SystemBarUtils.hideStableNavBar(this);
+//            SystemBarUtils.hideStableNavBar(this);
         }
     }
 
@@ -636,7 +639,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      * 默认是隐藏的
      */
     private void toggleMenu(boolean hideStatusBar) {
-        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
 
         initMenuAnim();
 
@@ -874,8 +877,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        SystemBarUtils.hideStableStatusBar(this);
-        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//        SystemBarUtils.hideStableStatusBar(this);
+//        SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
         if (requestCode == REQUEST_MORE_SETTING) {
             boolean fullScreen = ReadSettingManager.getInstance().isFullScreen();
             if (isFullScreen != fullScreen) {
@@ -886,11 +889,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             // 设置显示状态
             if (isFullScreen) {
-                SystemBarUtils.hideStableNavBar(this);
-                SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
+//                SystemBarUtils.hideStableNavBar(this);
+//                SystemBarUtils.setStableNavBarColor(this,getResources().getColor(R.color.nb_read_menu_bg));
 
             } else {
-                SystemBarUtils.showStableNavBar(this);
+//                SystemBarUtils.showStableNavBar(this);
             }
         }
     }
