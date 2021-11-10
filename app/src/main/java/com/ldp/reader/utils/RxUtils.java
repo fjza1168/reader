@@ -1,5 +1,7 @@
 package com.ldp.reader.utils;
 
+import android.support.annotation.NonNull;
+
 import com.ldp.reader.model.bean.CommentBean;
 import com.ldp.reader.model.bean.DetailBean;
 
@@ -19,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RxUtils {
 
+    @NonNull
     public static <T> SingleSource<T> toSimpleSingle(Single<T> upstream){
         return upstream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

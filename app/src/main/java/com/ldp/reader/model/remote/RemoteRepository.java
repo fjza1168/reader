@@ -14,6 +14,7 @@ import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.model.bean.ContentBean;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
+import com.ldp.reader.model.bean.SmsLoginBean;
 import com.ldp.reader.model.bean.SyncBookShelfBean;
 import com.ldp.reader.model.bean.packages.BillboardPackage;
 import com.ldp.reader.model.bean.BillBookBean;
@@ -118,10 +119,13 @@ public class RemoteRepository {
         return mBookApiOwn.userLogin(userNameInput,passwordInput);
     }
 
+    public Single<SmsLoginBean> smsLogin(String phoneNumber , String smsCode , String registrationId) {
+        return mBookApiOwn.smsLogin( phoneNumber , smsCode , registrationId) ;
+    }
+
     public Single<DirectLoginResultBean> userDirectLogin(VerifyResult verifyResult,String registrationId) {
         return mBookApiOwn.userDirectLogin(APP_KEY,APP_SECRET,verifyResult.getToken() ,verifyResult.getOpToken(),verifyResult.getOperator(),registrationId) ;
     }
-
 
     public Single<List<BookIdBean>> getBookShelf(String header) {
         return mBookApiOwn.getBookShelf(header);

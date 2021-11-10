@@ -26,6 +26,9 @@
         android:supportsRtl="true"
         android:persistent="true"
         android:theme="@style/AppTheme"
+
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity

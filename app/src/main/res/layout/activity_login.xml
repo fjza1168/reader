@@ -22,7 +22,7 @@
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="账号或密码登录"
+			android:text="登录"
 			android:textSize="26sp"
 			android:textStyle="bold"/>
 
@@ -32,15 +32,23 @@
 			android:layout_marginTop="26dp"
 			android:background="@drawable/border_bottom">
 			<EditText
-				android:id="@+id/et_user_name_input"
-				android:layout_width="match_parent"
+				android:id="@+id/et_user_phone"
+				android:layout_width="0dp"
+				android:layout_weight="1"
 				android:layout_height="40dp"
 				android:textCursorDrawable="@color/light_blue"
 				android:textSize="14sp"
-				android:hint="请输入用户名"
+				android:hint="请输入手机号码"
 				android:singleLine="true"
 				android:maxLines="1"
 				android:background="@null" />
+			<Button
+				android:id="@+id/btn_get_sms_code"
+				android:layout_width="wrap_content"
+				android:layout_height="40dp"
+				android:text="获取验证码"
+				android:textColor="@color/white"
+				android:background="@android:color/holo_purple"/>
 		</LinearLayout>
 
 		<LinearLayout
@@ -49,12 +57,12 @@
 			android:layout_marginTop="8dp"
 			android:background="@drawable/border_bottom">
 			<EditText
-				android:id="@+id/et_password_input"
+				android:id="@+id/et_sms_code_input"
 				android:layout_width="match_parent"
 				android:layout_height="40dp"
 				android:textCursorDrawable="@color/red"
 				android:textSize="14sp"
-				android:hint="请输入密码"
+				android:hint="请输入验证码"
 				android:singleLine="true"
 				android:maxLines="1"
 				android:inputType="textPassword"
@@ -66,10 +74,10 @@
 			android:layout_width="match_parent"
 			android:layout_height="50dp"
 			android:layout_marginTop="26dp"
-            android:text="登录"
+            android:text="验证码登录"
 			android:textSize="23sp"
 			android:textColor="@color/white"
-			android:background="@drawable/shape_common_gray_corner"/>
+			android:background="@color/red" />
 
 		<Button
 			android:id="@+id/btn_direct_login"
@@ -78,8 +86,9 @@
 			android:layout_marginTop="26dp"
 			android:text="本机号码一键登录"
 			android:textSize="23sp"
-			android:textColor="@color/white"
-			android:background="@drawable/shape_common_gray_corner"/>
+			android:gravity="center"
+			android:background="@color/red"
+			android:textColor="@color/white" />
 	</LinearLayout>
 	<LinearLayout
 		android:visibility="gone"

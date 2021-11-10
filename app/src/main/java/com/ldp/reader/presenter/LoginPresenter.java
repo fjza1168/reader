@@ -7,6 +7,7 @@ import com.ldp.reader.RxBus;
 import com.ldp.reader.event.BookSyncEvent;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
+import com.ldp.reader.model.bean.SmsLoginBean;
 import com.ldp.reader.model.remote.RemoteRepository;
 import com.ldp.reader.presenter.contract.LoginContract;
 import com.ldp.reader.ui.base.RxPresenter;
@@ -83,7 +84,22 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
     }
 
     @Override
+    public void smsLogin(String phoneNumber, String smsCode, String registrationId){
+       Disposable disposable = RemoteRepository.getInstance().smsLogin( phoneNumber,  smsCode,  registrationId)
+                .compose(RxUtils::toSimpleSingle)
+               .subscribe(new Consumer<SmsLoginBean>() {
+                   @Override
+                   public void accept(SmsLoginBean smsLoginBean) throws Exception {
+                       mView.finishSmsLogin(smsLoginBean);
+                   }
+               }, Throwable::printStackTrace);
+       addDisposable(disposable);
+
+    }
+
+    @Override
     public void directLogin() {
+        Log.d(TAG, "directLogin: ");
         registrationId = SharedPreUtils.getInstance().getString("registrationId");
         SecVerify.verify(new VerifyCallback() {
             @Override
@@ -96,11 +112,11 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
             }
             @Override
             public void onComplete(VerifyResult data) {
-                Log.d(TAG, "onComplete: ");
+                Log.e(TAG, "onComplete: ");
                 // 获取授权码成功，将token信息传给应用服务端，再由应用服务端进行登录验证，此功能需由开发者自行实现
-                Log.d(TAG, "onComplete: "+ data);
-                Log.d(TAG, "onComplete: "+ data.getToken());
-                Log.d(TAG, "onComplete: registrationId " + registrationId);
+                Log.e(TAG, "onComplete: "+ data);
+                Log.e(TAG, "onComplete: "+ data.getToken());
+                Log.e(TAG, "onComplete: registrationId " + registrationId);
 
                 Disposable disposable =  RemoteRepository.getInstance().userDirectLogin(data,registrationId)
                         .compose(RxUtils::toSimpleSingle)
@@ -122,6 +138,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View>
             }
             @Override
             public void onFailure(VerifyException e) {
+                Log.d(TAG, "onFailure: " +e.toString());
                 //TODO处理失败的结果
             }
         });

@@ -9,6 +9,7 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.ldp.reader.utils.EncryptUtils;
+import com.mob.MobSDK;
 import com.tencent.bugly.crashreport.CrashReport;
 
 
@@ -29,7 +30,7 @@ public class App extends Application {
         CrashReport.initCrashReport(getApplicationContext(), "ab86f05cf4", true);
 //        startService(new Intent(getContext(), DownloadService.class));
         // 初始化内存分析工具
-
+        MobSDK.submitPolicyGrantResult(true, null);
         getCertificateMD5();
     }
 

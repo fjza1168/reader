@@ -7,6 +7,7 @@ import com.ldp.reader.model.bean.ChapterBean;
 import com.ldp.reader.model.bean.ContentBean;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
+import com.ldp.reader.model.bean.SmsLoginBean;
 import com.ldp.reader.model.bean.SyncBookShelfBean;
 
 import java.util.List;
@@ -113,4 +114,11 @@ public interface BookApiOwn {
     Single<SyncBookShelfBean> setBookShelfByMobile(@Body RequestBody body);
 
 
+    /**
+     * 验证码登录
+     *
+     * @return
+     */
+    @POST("/smsLogin")
+    Single<SmsLoginBean> smsLogin(@Query("phoneNumber")String phoneNumber , @Query("smsCode")String smsCode , @Query("registrationId")String registrationId);
 }

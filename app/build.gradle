@@ -8,6 +8,8 @@ MobSDK {
     appKey "2dc105548a750"
     appSecret "b63ac145473ed640a5a449f368570596"
     SecVerify {}
+    SMSSDK {
+    }
     MobPush {
         devInfo {
 //            MEIZU {

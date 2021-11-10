@@ -17,6 +17,7 @@ import com.ldp.reader.RxBus;
 import com.ldp.reader.event.BookSyncEvent;
 import com.ldp.reader.model.bean.DirectLoginResultBean;
 import com.ldp.reader.model.bean.LoginResultBean;
+import com.ldp.reader.model.bean.SmsLoginBean;
 import com.ldp.reader.presenter.LoginPresenter;
 import com.ldp.reader.presenter.contract.LoginContract;
 import com.ldp.reader.ui.base.BaseMVPActivity;
@@ -25,9 +26,14 @@ import com.ldp.reader.utils.ToastUtils;
 import com.mob.pushsdk.MobPush;
 import com.mob.pushsdk.MobPushCallback;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
 
 /**
  * Created by ldp on 17-4-24.
@@ -36,10 +42,10 @@ import butterknife.OnClick;
 public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         implements LoginContract.View {
     private static final String TAG = LoginActivity.class.getSimpleName();
-    @BindView(R.id.et_user_name_input)
-    EditText etUserNameInput;
-    @BindView(R.id.et_password_input)
-    EditText etPasswordInput;
+    @BindView(R.id.et_user_phone)
+    EditText etUserPhone;
+    @BindView(R.id.et_sms_code_input)
+    EditText etSmsCodeInput;
     @BindView(R.id.btn_user_login)
     Button btnUserLogin;
     @BindView(R.id.iv_login_back)
@@ -56,6 +62,9 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     Button btnDirectLogin;
     @BindView(R.id.btn_user_logout)
     Button btnUserLogout;
+    @BindView(R.id.btn_get_sms_code)
+    Button btnGetSmsCode;
+
 
 
     private String userName;
@@ -106,6 +115,20 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
             tvUserName.setText(SharedPreUtils.getInstance().getString("userName"));
         }
         getRegId();
+
+
+        SMSSDK.registerEventHandler(new EventHandler(){
+            @Override
+            public void afterEvent(int i, int i1, Object o) {
+                if (i == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE && i1 ==  SMSSDK.RESULT_COMPLETE) {
+                    runOnUiThread(() -> {
+                         mPresenter.smsLogin(phoneNumber,smsCode ,registrationId );
+                    });
+
+                }
+                super.afterEvent(i, i1, o);
+            }
+        });
     }
 
 
@@ -138,6 +161,17 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
     }
 
     @Override
+    public void finishSmsLogin(SmsLoginBean smsLoginBean) {
+        SharedPreUtils.getInstance().putString("loginType", "telecom");
+        SharedPreUtils.getInstance().putString("token", smsLoginBean.getSmsCode());
+        SharedPreUtils.getInstance().putString("userName", smsLoginBean.getPhoneNumber());
+        ToastUtils.show("登录成功");
+        RxBus.getInstance().post(new BookSyncEvent());
+
+        finish();
+    }
+
+    @Override
     public void showError() {
         ToastUtils.show("登录失败");
 
@@ -155,20 +189,30 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.iv_login_back, R.id.btn_user_login,R.id.btn_direct_login,R.id.btn_user_logout})
+    String phoneNumber = "" ,smsCode = "";
+    @OnClick({R.id.iv_login_back, R.id.btn_user_login,R.id.btn_direct_login,R.id.btn_user_logout ,R.id.btn_get_sms_code})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_login_back:
                 finish();
                 break;
             case R.id.btn_user_login:
-                userName = etUserNameInput.getText().toString();
-                String password = etPasswordInput.getText().toString();
-                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
-                    ToastUtils.show("用户名或者密码不能为空");
-                    return;
-                }
-                mPresenter.userLogin(userName, password);
+//                userName = etUserNameInput.getText().toString();
+//                String password = etPasswordInput.getText().toString();
+//                if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(password)) {
+//                    ToastUtils.show("用户名或者密码不能为空");
+//                    return;
+//                }
+//                mPresenter.userLogin(userName, password);
+
+                phoneNumber = etUserPhone.getText().toString().trim();
+                smsCode = etSmsCodeInput.getText().toString().trim();
+
+                SMSSDK.submitVerificationCode("86" ,phoneNumber,smsCode);
+
+                break;
+            case  R.id.btn_get_sms_code:
+                SMSSDK.getVerificationCode("86", etUserPhone.getText().toString().trim(), null, null);
                 break;
             case R.id.btn_direct_login:
                 mPresenter.directLogin();
@@ -188,7 +232,7 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
         SharedPreUtils.getInstance().putString("userName", "");
     }
 
-    String registrationId;
+    String registrationId = "";
     private void getRegId(){
         Log.d(TAG, "preDirectLogin: registrationId");
         registrationId = SharedPreUtils.getInstance().getString("registrationId");
@@ -204,4 +248,6 @@ public class LoginActivity extends BaseMVPActivity<LoginContract.Presenter>
             });
         }
     }
+
+
 }
