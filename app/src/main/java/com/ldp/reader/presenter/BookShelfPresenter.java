@@ -104,7 +104,6 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         addDisposable(disposable);
     }
 
-
     @Override
     public void getBookShelf(String token) {
         Disposable disposable = RemoteRepository.getInstance()
