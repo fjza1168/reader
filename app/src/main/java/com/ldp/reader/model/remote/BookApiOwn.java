@@ -15,6 +15,7 @@ import java.util.List;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -29,6 +30,7 @@ public interface BookApiOwn {
 
     /**
      * 书籍查询
+     *
      * @param bookName:作者名或者书名
      * @return
      */
@@ -38,15 +40,23 @@ public interface BookApiOwn {
     /**
      * 获取书籍详情
      *
-     *
      * @param bookId:书籍ID
      * @return
      */
     @GET("/getBookInfo")
     Single<BookDetailBeanInOwn> getBookInfo(@Query("bookId") String bookId);
+
+    /**
+     * 获取书籍详情(批量)
+     *
+     * @param bookIdList:书籍ID列表
+     * @return
+     */
+    @POST("/getBookInfoBatch")
+    Single<List<BookDetailBeanInOwn>> getBookInfoBatch(@Body RequestBody body);
+
     /**
      * 获取书籍目录
-     *
      *
      * @param bookId:书籍ID
      * @return
@@ -57,12 +67,11 @@ public interface BookApiOwn {
     /**
      * 获取书籍详情
      *
-     *
      * @param bookId:书籍ID
      * @return
      */
     @GET("/getBookContent")
-    Single<ContentBean> getBookContent(@Query("bookId") String bookId, @Query("chapterId") String chapterId , @Query("sourceIndex") int sourceIndex);
+    Single<ContentBean> getBookContent(@Query("bookId") String bookId, @Query("chapterId") String chapterId, @Query("sourceIndex") int sourceIndex);
 
     /**
      * 登录
@@ -78,7 +87,7 @@ public interface BookApiOwn {
      * @return
      */
     @POST("/directLogin")
-    Single<DirectLoginResultBean> userDirectLogin(@Query("appkey") String appkey , @Query("appSecret") String appSecret, @Query("token") String token , @Query("opToken") String opToken, @Query("operator") String operator ,@Query("registrationId") String registrationId ) ;
+    Single<DirectLoginResultBean> userDirectLogin(@Query("appkey") String appkey, @Query("appSecret") String appSecret, @Query("token") String token, @Query("opToken") String opToken, @Query("operator") String operator, @Query("registrationId") String registrationId);
 
     /**
      * 获取所有书籍ID  传统账号密码登录
@@ -95,7 +104,7 @@ public interface BookApiOwn {
      * @return
      */
     @GET("/getBookShelfByMobile")
-    Single<List<BookIdBean>> getBookShelfByMobile(@Query("mobile")String mobile ,@Query("mobileToken")String mobileToken);
+    Single<List<BookIdBean>> getBookShelfByMobile(@Query("mobile") String mobile, @Query("mobileToken") String mobileToken);
 
     /**
      * 上传所有书籍ID  传统账号密码登录
@@ -120,5 +129,5 @@ public interface BookApiOwn {
      * @return
      */
     @POST("/smsLogin")
-    Single<SmsLoginBean> smsLogin(@Query("phoneNumber")String phoneNumber , @Query("smsCode")String smsCode , @Query("registrationId")String registrationId);
+    Single<SmsLoginBean> smsLogin(@Query("phoneNumber") String phoneNumber, @Query("smsCode") String smsCode, @Query("registrationId") String registrationId);
 }

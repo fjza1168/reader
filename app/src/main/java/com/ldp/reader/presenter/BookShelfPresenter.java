@@ -55,12 +55,11 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     public void refreshCollBooks() {
         List<CollBookBean> collBooks = BookRepository
                 .getInstance().getCollBooks();
-        for(CollBookBean bookBean: collBooks){
-            Log.d("+书名",bookBean.getTitle());
+        for (CollBookBean bookBean : collBooks) {
+            Log.d("+书名", bookBean.getTitle());
         }
         mView.finishRefresh(collBooks);
     }
-
 
 
     @Override
@@ -81,7 +80,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                 .getRecommendBooks(gender)
                 .doOnSuccess(new Consumer<List<CollBookBean>>() {
                     @Override
-                    public void accept(List<CollBookBean> collBooks) throws Exception{
+                    public void accept(List<CollBookBean> collBooks) throws Exception {
 //                        //更新目录
 //                        updateCategory(collBooks);
 //                        //异步存储到数据库中
@@ -95,14 +94,11 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                             mView.finishRefresh(beans);
                             mView.complete();
                         },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable e) throws Exception {
-                                //提示没有网络
-                                LogUtils.e(e);
-                                mView.showErrorTip(e.toString());
-                                mView.complete();
-                            }
+                        e -> {
+                            //提示没有网络
+                            LogUtils.e(e);
+                            mView.showErrorTip(e.toString());
+                            mView.complete();
                         }
                 );
         addDisposable(disposable);
@@ -112,13 +108,13 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     @Override
     public void getBookShelf(String token) {
         Disposable disposable = RemoteRepository.getInstance()
-              .getBookShelf(token)
+                .getBookShelf(token)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(
                         bookIdBeans -> {
                             List<String> bookIdList = new ArrayList<>();
-                            for (BookIdBean bookIdBean:bookIdBeans ) {
-                                bookIdList.add(bookIdBean.getBookId()+"");
+                            for (BookIdBean bookIdBean : bookIdBeans) {
+                                bookIdList.add(bookIdBean.getBookId() + "");
                             }
                             getBookInfo(bookIdList);
                         },
@@ -133,7 +129,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     }
 
     @Override
-    public void getBookShelfByMobile(String mobile,String mobileToken) {
+    public void getBookShelfByMobile(String mobile, String mobileToken) {
         Disposable disposable = RemoteRepository.getInstance()
                 .getBookShelfByMobile(mobile, mobileToken)
                 .compose(RxUtils::toSimpleSingle)
@@ -157,106 +153,75 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
 
     public void getBookInfo(List<String> bookIdList) {
         List<Single<BookDetailBeanInOwn>> bookDetailSingleList = new ArrayList<>();
-        for (String bookId:bookIdList ) {
-            CollBookBean  mCollBookBean = BookRepository.getInstance().getCollBook(bookId);
-            if(null == mCollBookBean){
-                bookDetailSingleList.add(RemoteRepository.getInstance().getBookInfo(bookId))  ;
+        for (String bookId : bookIdList) {
+            CollBookBean mCollBookBean = BookRepository.getInstance().getCollBook(bookId);
+            if (null == mCollBookBean) {
+                bookDetailSingleList.add(RemoteRepository.getInstance().getBookInfo(bookId));
             }
         }
-       Disposable disposable = Single.concat(bookDetailSingleList)
-               .subscribeOn(Schedulers.io())
-               .observeOn(AndroidSchedulers.mainThread() )
-          .subscribe(new Consumer<BookDetailBeanInOwn>() {
-              @Override
-              public void accept(BookDetailBeanInOwn bookDetailBeanInOwn) throws Exception {
-                  addToBookShelf(bookDetailBeanInOwn.getCollBookBean());
-              }
-          }, new Consumer<Throwable>() {
-              @Override
-              public void accept(Throwable throwable) throws Exception {
-                  mView.showErrorTip(throwable.getMessage());
-              }
-          }, new Action() {
-              @Override
-              public void run() throws Exception {
-                  List<CollBookBean> collBooks = BookRepository.getInstance().getCollBooks();
-                  List<String> bookIds = new ArrayList<>();
-                  for (CollBookBean collBookBean : collBooks) {
-                      bookIds.add(collBookBean.get_id());
-                  }
-                  if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
-                      setBookShelf(bookIds);
-                  } else {
-                      String mobile = SharedPreUtils.getInstance().getString("userName");
-                      String mobileToken = SharedPreUtils.getInstance().getString("token");
-                      setBookShelfByMobile(bookIds, mobile, mobileToken);
-                  }
-              }
-          });
+        Disposable disposable = Single.concat(bookDetailSingleList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bookDetailBeanInOwn -> addToBookShelf(bookDetailBeanInOwn.getCollBookBean()), throwable -> mView.showErrorTip(throwable.getMessage()), () -> {
+                    List<CollBookBean> collBooks = BookRepository.getInstance().getCollBooks();
+                    List<String> bookIds = new ArrayList<>();
+                    for (CollBookBean collBookBean : collBooks) {
+                        bookIds.add(collBookBean.get_id());
+                    }
+                    if ("password".equals(SharedPreUtils.getInstance().getString("loginType"))) {
+                        setBookShelf(bookIds);
+                    } else {
+                        String mobile = SharedPreUtils.getInstance().getString("userName");
+                        String mobileToken = SharedPreUtils.getInstance().getString("token");
+                        setBookShelfByMobile(bookIds, mobile, mobileToken);
+                    }
+                });
         addDisposable(disposable);
     }
-
 
 
     private void addToBookShelf(CollBookBean collBookBean) {
         List<BookChapterBean> bookChapterBeans = new ArrayList<>();
         BookRepository.getInstance()
                 .saveCollBookWithAsync(collBookBean);
-        Disposable disposable= RemoteRepository.getInstance()
+        Disposable disposable = RemoteRepository.getInstance()
                 .getBookFolder(collBookBean.get_id())
-               .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Consumer<List<ChapterBean>>() {
-                    @Override
-                    public void accept(List<ChapterBean> chapterBeans) throws Exception {
-                        for (ChapterBean chapterBean : chapterBeans) {
-                            BookChapterBean bookChapterBeanTemp = new BookChapterBean();
-                            bookChapterBeanTemp.setLink(chapterBean.getChapterId() + "");
-                            bookChapterBeanTemp.setTitle(chapterBean.getTitle());
-                            bookChapterBeanTemp.setValidInZhuishu(false);
-                            bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
-                            bookChapterBeanTemp.setBookId(collBookBean.get_id());
-                            bookChapterBeans.add(bookChapterBeanTemp);
-                        }
-                        collBookBean.setBookChapters(bookChapterBeans);
-                        //存储收藏
-                        BookRepository.getInstance().saveCollBookWithAsync(collBookBean);
-                        CollBookBean collBookBeanResult = BookRepository.getInstance().getCollBook(collBookBean.get_id());
-                        Log.d(TAG, "addToBookShelf:collBookBeanResult "+ collBookBeanResult);
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(chapterBeans -> {
+                    for (ChapterBean chapterBean : chapterBeans) {
+                        BookChapterBean bookChapterBeanTemp = new BookChapterBean();
+                        bookChapterBeanTemp.setLink(chapterBean.getChapterId() + "");
+                        bookChapterBeanTemp.setTitle(chapterBean.getTitle());
+                        bookChapterBeanTemp.setValidInZhuishu(false);
+                        bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
+                        bookChapterBeanTemp.setBookId(collBookBean.get_id());
+                        bookChapterBeans.add(bookChapterBeanTemp);
+                    }
+                    collBookBean.setBookChapters(bookChapterBeans);
+                    //存储收藏
+                    BookRepository.getInstance().saveCollBookWithAsync(collBookBean);
+                    CollBookBean collBookBeanResult = BookRepository.getInstance().getCollBook(collBookBean.get_id());
+                    Log.d(TAG, "addToBookShelf:collBookBeanResult " + collBookBeanResult);
 
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        mView.showErrorTip(throwable.getMessage());
-                    }
-                });
+                }, throwable -> mView.showErrorTip(throwable.getMessage()));
 
 
         addDisposable(disposable);
     }
 
 
-
-
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
     @Override
     public void setBookShelf(List<String> bookIds) {
         RequestBody body = RequestBody.create(JSON, new Gson().toJson(bookIds));
         String token = SharedPreUtils.getInstance().getString("token");
         Disposable disposable = RemoteRepository.getInstance().setBookShelf(token, body)
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Consumer<SyncBookShelfBean>() {
-                    @Override
-                    public void accept(SyncBookShelfBean syncBookShelfBean) throws Exception {
-                      mView.finishSyncBook();
-                      mView.finishUpdate();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        mView.showErrorTip(throwable.getMessage());
-                    }
-                });
+                .subscribe(syncBookShelfBean -> {
+                    mView.finishSyncBook();
+                    mView.finishUpdate();
+                }, throwable -> mView.showErrorTip(throwable.getMessage()));
         addDisposable(disposable);
     }
 
@@ -269,227 +234,137 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         RequestBody body = RequestBody.create(JSON, new Gson().toJson(directSycBookShelfBean));
         Disposable disposable = RemoteRepository.getInstance().setBookShelfByMobile(body)
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Consumer<SyncBookShelfBean>() {
-                    @Override
-                    public void accept(SyncBookShelfBean syncBookShelfBean) throws Exception {
-                        mView.finishSyncBook();
-                        mView.finishUpdate();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        mView.showErrorTip(throwable.getMessage());
-                    }
-                });
+                .subscribe(syncBookShelfBean -> {
+                    mView.finishSyncBook();
+                    mView.finishUpdate();
+                }, throwable -> mView.showErrorTip(throwable.getMessage()));
         addDisposable(disposable);
     }
 
 
-    //需要修改
-    @Override
-    public void updateCollBooks(List<CollBookBean> collBookBeans) {
-        Log.d(TAG, "+updateCollBooks ");
-
-//        List<CollBookBean> collBookBeans = BookRepository
-//                .getInstance().getCollBooks();
-        if (collBookBeans == null || collBookBeans.isEmpty()) {
-            return;
-        }
-        List<CollBookBean> collBooks = new ArrayList<>(collBookBeans);
-        List<Single<BookDetailBeanInOwn>> observables = new ArrayList<>(collBooks.size());
-        List<Single<BookDetailBeanInBiquge>> observablesInBiquge = new ArrayList<>();
-
-        Iterator<CollBookBean> it = collBooks.iterator();
-        while (it.hasNext()) {
-            CollBookBean collBook = it.next();
-            //删除本地文件
-            if (collBook.isLocal()) {
-                it.remove();
-            } else {
-                observables.add(RemoteRepository.getInstance().getBookInfo(collBook.get_id()));
-//                if (null == collBook.getBookIdInBiquge()|| collBook.getBookIdInBiquge().isEmpty()) {
-//
-//                    continue;
-//                }
-
-                Log.d(TAG, "+笔趣阁ID " + collBook.getBookIdInBiquge());
-//                observablesInBiquge.add(RemoteRepository.getInstance().getBookDetailByBiquge(collBook.get_id()));
-            }
-        }
-
-        List<CollBookBean> newCollBooksMerge = new ArrayList<CollBookBean>(observables.size());
-        Disposable chaptersDispoable = Single.concat(observables)
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<BookDetailBeanInOwn>() {
-                    @Override
-                    public void accept(BookDetailBeanInOwn bookDetailBeanInOwn) throws Exception {
-                        CollBookBean oldCollBook = BookRepository.getInstance().getCollBook(String.valueOf(bookDetailBeanInOwn.getBookId()));
-
-                        //如果是oldBook是update状态，或者newCollBook与oldBook章节数不同
-//                        showNotification(oldCollBook);
-//                        BookShelfPresenter.this.updateCategory(oldCollBook);
-                        if (!oldCollBook.getLastChapter().equals(bookDetailBeanInOwn.getLastChapter())) {
-                            oldCollBook.setLastChapter(bookDetailBeanInOwn.getLastChapter());
-                            Log.d(TAG, "+更新书籍 " + oldCollBook.getTitle() + oldCollBook.getLastChapter());
-                            oldCollBook.setUpdate(true);
-//       n                      showNotification(oldCollBook);
-//                            BookShelfPresenter.this.updateCategory(oldCollBook);
-                            updateCategory(oldCollBook);
-                            Vibrator vibrator = (Vibrator) App.getContext().getSystemService(App.getContext().VIBRATOR_SERVICE);
-                            vibrator.vibrate(400);
-                        } else {
-                            oldCollBook.setUpdate(false);
-                        }
-                        oldCollBook.setUpdated(StringUtils.dateConvert(StringUtils.dateConvert(bookDetailBeanInOwn.getUpdateTime(),Constant.FORMAT_BOOK_DATE) ,Constant.FORMAT_BOOK_DATE) );
-                        newCollBooksMerge.add(oldCollBook);
-                        Log.d(TAG, "+检查更新");
-                    }
-                }, throwable -> {
-
-                }, () -> {
-//                        updateCategory(newCollBooksMerge);
-//                                //异步存储到数据库中
-                    BookRepository.getInstance().saveCollBooks(newCollBooksMerge);
-//                                Log.d("+?5缓存", "运行");//
-                    mView.complete();
-                    mView.finishUpdate();
-
-                });
-        addDisposable(chaptersDispoable);
-
-
-//        if (collBookBeans == null || collBookBeans.isEmpty()) return;
+//    //需要修改
+//    @Override
+//    public void updateCollBooks(List<CollBookBean> collBookBeans) {
+//        Log.d(TAG, "+updateCollBooks ");
+//        if (collBookBeans == null || collBookBeans.isEmpty()) {
+//            return;
+//        }
 //        List<CollBookBean> collBooks = new ArrayList<>(collBookBeans);
-//        List<Single<BookDetailBean>> observables = new ArrayList<>(collBooks.size());
+//        List<Single<BookDetailBeanInOwn>> observables = new ArrayList<>(collBooks.size());
 //        Iterator<CollBookBean> it = collBooks.iterator();
-//        while (it.hasNext()){
+//        while (it.hasNext()) {
 //            CollBookBean collBook = it.next();
 //            //删除本地文件
 //            if (collBook.isLocal()) {
 //                it.remove();
-//            }
-//            else {
-//                observables.add(RemoteRepository.getInstance()
-//                        .getBookDetail(collBook.get_id()));
+//            } else {
+//                observables.add(RemoteRepository.getInstance().getBookInfo(collBook.get_id()));
+//                Log.d(TAG, "+笔趣阁ID " + collBook.getBookIdInBiquge());
 //            }
 //        }
-//        //zip可能不是一个好方法。
-//        Single.zip(observables, new Function<Object[], List<CollBookBean>>() {
-//            @Override
-//            public List<CollBookBean> apply(Object[] objects) throws Exception {
-//                List<CollBookBean> newCollBooks = new ArrayList<CollBookBean>(objects.length);
-//                for (int i=0; i<collBooks.size(); ++i){
-//                    CollBookBean oldCollBook = collBooks.get(i);
-//                    CollBookBean newCollBook = ((BookDetailBean)objects[i]).getCollBookBean();
-//                    //如果是oldBook是update状态，或者newCollBook与oldBook章节数不同
-//                    if (oldCollBook.isUpdate() ||
-//                            !oldCollBook.getLastChapter().equals(newCollBook.getLastChapter())){
-//                        newCollBook.setUpdate(true);
-//                    }
-//                    else {
-//                        newCollBook.setUpdate(false);
-//                    }
-//                    newCollBook.setLastRead(oldCollBook.getLastRead());
-//                    newCollBooks.add(newCollBook);
-//                    //存储到数据库中
-//                    BookRepository.getInstance().saveCollBooks(newCollBooks);
-//                }
-//                return newCollBooks;
-//            }
-//        })
-//                .compose(RxUtils::toSimpleSingle)
-//                .subscribe(new SingleObserver<List<CollBookBean>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        addDisposable(d);
-//                    }
 //
-//                    @Override
-//                    public void onSuccess(List<CollBookBean> value) {
-//                        //跟原先比较
-//                        mView.finishUpdate();
-//                        List<String> bookNames = new ArrayList<>();
-//                        for (CollBookBean collBookBean: value) {
-//                            bookNames.add(collBookBean.getTitle());
-//                        }
-//                        mView.complete();
-//
-//
+//        List<CollBookBean> newCollBooksMerge = new ArrayList<>(observables.size());
+//        Disposable chaptersDispoable = Single.concat(observables)
+//                .observeOn(Schedulers.io())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(bookDetailBeanInOwn -> {
+//                    CollBookBean oldCollBook = BookRepository.getInstance().getCollBook(String.valueOf(bookDetailBeanInOwn.getBookId()));
+//                    if (!oldCollBook.getLastChapter().equals(bookDetailBeanInOwn.getLastChapter())) {
+//                        oldCollBook.setLastChapter(bookDetailBeanInOwn.getLastChapter());
+//                        Log.d(TAG, "+更新书籍 " + oldCollBook.getTitle() + oldCollBook.getLastChapter());
+//                        oldCollBook.setUpdate(true);
+//                        updateCategory(oldCollBook);
+//                        Vibrator vibrator = (Vibrator) App.getContext().getSystemService(App.getContext().VIBRATOR_SERVICE);
+//                        vibrator.vibrate(400);
+//                    } else {
+//                        oldCollBook.setUpdate(false);
 //                    }
+//                    oldCollBook.setUpdated(StringUtils.dateConvert(StringUtils.dateConvert(bookDetailBeanInOwn.getUpdateTime(), Constant.FORMAT_BOOK_DATE), Constant.FORMAT_BOOK_DATE));
+//                    newCollBooksMerge.add(oldCollBook);
+//                    Log.d(TAG, "+检查更新");
+//                }, throwable -> {
 //
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        //提示没有网络
-//                        mView.showErrorTip(e.toString());
-//                        mView.complete();
-//                        LogUtils.e(e);
-//                    }
+//                }, () -> {
+////                                异步存储到数据库中
+//                    BookRepository.getInstance().saveCollBooks(newCollBooksMerge);
+//                    mView.complete();
+//                    mView.finishUpdate();
+//
 //                });
-    }
+//        addDisposable(chaptersDispoable);
+//    }
 
-    //更新每个CollBook的目录
-    private void updateCategory(List<CollBookBean> collBookBeans) {
-        List<Single<List<BookChapterBean>>> observables = new ArrayList<>(collBookBeans.size());
-        for (CollBookBean bean : collBookBeans) {
-            observables.add(
-                    RemoteRepository.getInstance().getBookChapters(bean.get_id())
-            );
+
+    @Override
+    public void updateCollBooks(List<CollBookBean> collBookBeans) {
+        if (collBookBeans == null || collBookBeans.isEmpty()) {
+            return;
         }
-        Iterator<CollBookBean> it = collBookBeans.iterator();
-        //执行在上一个方法中的子线程中
-        Single.concat(observables)
-                .subscribe(
-                        new Consumer<List<BookChapterBean>>() {
-                            @Override
-                            public void accept(List<BookChapterBean> chapterList) throws Exception {
-
-                                for (BookChapterBean bean : chapterList) {
-                                    bean.setId(MD5Utils.strToMd5By16(bean.getLink()));
-                                }
-
-                                CollBookBean bean = it.next();
-                                bean.setLastRead(StringUtils.
-                                        dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-                                bean.setBookChapters(chapterList);
-                            }
+        List<Long> bookIdList = new ArrayList<>();
+        for (CollBookBean collBook : collBookBeans) {
+            //删除本地文件
+            if (!collBook.isLocal()) {
+                bookIdList.add(Long.valueOf(collBook.get_id()));
+            }
+        }
+        List<CollBookBean> newCollBooksMerge = new ArrayList<>();
+        RequestBody body = RequestBody.create(JSON, new Gson().toJson(bookIdList));
+        Disposable disposable = RemoteRepository.getInstance().getBookInfoBatch(body)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(bookDetailBeanInOwns -> {
+                    for (BookDetailBeanInOwn bookDetailBeanInOwn : bookDetailBeanInOwns) {
+                        CollBookBean oldCollBook = BookRepository.getInstance().getCollBook(String.valueOf(bookDetailBeanInOwn.getBookId()));
+                        if (!oldCollBook.getLastChapter().equals(bookDetailBeanInOwn.getLastChapter())) {
+                            updateBookInfo(bookDetailBeanInOwn, oldCollBook);
+                            newCollBooksMerge.add(oldCollBook);
+                        } else {
+                            oldCollBook.setUpdate(false);
                         }
-                );
+                        Log.d(TAG, "+检查更新");
+                    }
+                    BookRepository.getInstance().saveCollBooks(newCollBooksMerge);
+                    mView.complete();
+                    mView.finishUpdate();
+                }, Throwable::printStackTrace);
+        addDisposable(disposable);
     }
 
-    //更新每个CollBook的目录
+    private void updateBookInfo(BookDetailBeanInOwn bookDetailBeanInOwn, CollBookBean oldCollBook) {
+        oldCollBook.setLastChapter(bookDetailBeanInOwn.getLastChapter());
+        Log.d(TAG, "+更新书籍 " + oldCollBook.getTitle() + oldCollBook.getLastChapter());
+        oldCollBook.setUpdate(true);
+        updateCategory(oldCollBook);
+        Vibrator vibrator = (Vibrator) App.getContext().getSystemService(App.getContext().VIBRATOR_SERVICE);
+        vibrator.vibrate(400);
+        oldCollBook.setUpdated(StringUtils.dateConvert(StringUtils.dateConvert(bookDetailBeanInOwn.getUpdateTime(), Constant.FORMAT_BOOK_DATE), Constant.FORMAT_BOOK_DATE));
+    }
+
+
+    //更新Book的目录
     private void updateCategory(CollBookBean collBookBean) {
         List<BookChapterBean> bookChapterBeans = new ArrayList<>();
-        Log.d(TAG, "loadCategory: "+collBookBean.get_id()+""+collBookBean);
-        Disposable disposable= RemoteRepository.getInstance()
+        Log.d(TAG, "loadCategory: " + collBookBean.get_id() + "" + collBookBean);
+        Disposable disposable = RemoteRepository.getInstance()
                 .getBookFolder(collBookBean.get_id())
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Consumer<List<ChapterBean>>() {
-                    @Override
-                    public void accept(List<ChapterBean> chapterBeans) throws Exception {
-                        for (ChapterBean chapterBean : chapterBeans) {
-                            BookChapterBean bookChapterBeanTemp = new BookChapterBean();
-                            bookChapterBeanTemp.setLink(chapterBean.getChapterId() + "");
-                            bookChapterBeanTemp.setTitle(chapterBean.getTitle());
-                            bookChapterBeanTemp.setValidInZhuishu(false);
-                            bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
-                            Log.d(TAG, "+章节名  " + chapterBean.getTitle());
-                            bookChapterBeanTemp.setBookId(collBookBean.get_id());
-                            bookChapterBeans.add(bookChapterBeanTemp);
-                        }
-                        collBookBean.setBookChapters(bookChapterBeans);
-                        Log.d(TAG, "accept: " + bookChapterBeans);
-                        //存储收藏
-                        BookRepository.getInstance()
-                                .saveCollBookWithAsync(collBookBean);
-
+                .subscribe(chapterBeans -> {
+                    for (ChapterBean chapterBean : chapterBeans) {
+                        BookChapterBean bookChapterBeanTemp = new BookChapterBean();
+                        bookChapterBeanTemp.setLink(chapterBean.getChapterId() + "");
+                        bookChapterBeanTemp.setTitle(chapterBean.getTitle());
+                        bookChapterBeanTemp.setValidInZhuishu(false);
+                        bookChapterBeanTemp.setId(MD5Utils.strToMd5By16(bookChapterBeanTemp.getLink()));
+                        Log.d(TAG, "+章节名  " + chapterBean.getTitle());
+                        bookChapterBeanTemp.setBookId(collBookBean.get_id());
+                        bookChapterBeans.add(bookChapterBeanTemp);
                     }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    collBookBean.setBookChapters(bookChapterBeans);
+                    Log.d(TAG, "accept: " + bookChapterBeans);
+                    //存储收藏
+                    BookRepository.getInstance()
+                            .saveCollBookWithAsync(collBookBean);
 
-                    }
-                });
+                }, Throwable::printStackTrace);
     }
 
 }

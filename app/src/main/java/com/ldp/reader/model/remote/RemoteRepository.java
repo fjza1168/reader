@@ -103,8 +103,12 @@ public class RemoteRepository {
 
     public Single<BookDetailBeanInOwn> getBookInfo(String bookId) {
         return mBookApiOwn.getBookInfo(bookId);
-
     }
+
+    public Single<List<BookDetailBeanInOwn>> getBookInfoBatch( RequestBody body) {
+        return mBookApiOwn.getBookInfoBatch(body);
+    }
+
 
 
     public Single<List<ChapterBean>> getBookFolder(String bookId) {
