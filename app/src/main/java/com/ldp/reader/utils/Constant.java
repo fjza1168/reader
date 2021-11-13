@@ -26,19 +26,9 @@ public class Constant {
     /*URL_BASE*/
     public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
     public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
-    public static final String API_BASE_URL_BY_BIQUGE_SEARCH = "https://sou.jiaston.com";
-//    public static final String API_BASE_URL_BY_BIQUGE_SEARCH = "http://so.1122dh.com";
 
-    public static final String API_BASE_URL_BY_BIQUGE = "http://shuapi.jiaston.com";
-    public static final String API_BASE_URL_QUAPP = "http://quapp.1122dh.com";
-    public static final String IMG_BASE_URL_IN_BIQUGE = "https://imgapi.jiaston.com/BookFiles/BookImages/";
-
+    //阿里云
     public static final String API_BASE_URL_OWN= "http://47.98.166.103";
-//    public static final String API_BASE_URL_OWN= "http://180.76.134.114";
-//
-//    public static final String API_BASE_URL_OWN= "http://192.168.125.10";
-
-
 
     //book type
     public static final String BOOK_TYPE_COMMENT = "normal";

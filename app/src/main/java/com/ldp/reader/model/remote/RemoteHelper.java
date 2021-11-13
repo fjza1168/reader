@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RemoteHelper {
     private static final String TAG = "RemoteHelper";
     private static RemoteHelper sInstance;
-    private Retrofit mRetrofit,mRetrofitByBiqugeSearch,mRetrofitByBiquge,mRetrofitByOwn;
+    private Retrofit mRetrofit,mRetrofitByOwn;
     private OkHttpClient mOkHttpClient;
     private RemoteHelper(){
         Interceptor logIntercept = new HttpLoggingInterceptor();
@@ -33,37 +33,24 @@ public class RemoteHelper {
         mOkHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(logIntercept)
                 .addInterceptor(
-                        new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-//                                Request request = chain.request();
-                                Request request = chain.request()
-                                        .newBuilder()
-                                        .removeHeader("User-Agent")//移除旧的
+                        chain -> {
+                            Request request = chain.request()
+                                    .newBuilder()
+                                    .removeHeader("User-Agent")//移除旧的
 //                                        .addHeader("User-Agent", WebSettings.getDefaultUserAgent(App.getContext()))//添加真正的头部
-                                        .addHeader("User-Agent", " okhttp/3.5.0")//添加真正的头部
-                                        .build();
+                                    .addHeader("User-Agent", " okhttp/3.5.0")//添加真正的头部
+                                    .build();
 
-                                HttpUrl requestUrl = request.url();
-                                String oldUrl = requestUrl.toString();
-                                Response response = null;
-//                                try {
-                                //在这里获取到request后就可以做任何事情了
-//                                Log.d(TAG, "+intercept: " + request.url().toString());
-                                try {
-                                    response = chain.proceed(request);
-                                }
-                                catch (IOException e){
-                                    Log.d(TAG, "intercept: ");
-
-                                }
-//                                 Log.d(TAG, "+response: " + response.toString());
-
-//                                }catch (SocketTimeoutException e) {
-//                                    e.printStackTrace();
-//                                }
-                                return response;
+                            HttpUrl requestUrl = request.url();
+                            Response response = null;
+                            try {
+                                response = chain.proceed(request);
                             }
+                            catch (IOException e){
+                                Log.d(TAG, "intercept: ");
+
+                            }
+                            return response;
                         }
                 ).readTimeout(70, TimeUnit.SECONDS).retryOnConnectionFailure(true).build();
 
@@ -72,24 +59,6 @@ public class RemoteHelper {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(Constant.API_BASE_URL)
-                .build();
-        mRetrofitByBiqugeSearch = new Retrofit.Builder()
-                .client(mOkHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(Constant.API_BASE_URL_BY_BIQUGE_SEARCH)
-                .build();
-        mRetrofitByBiquge = new Retrofit.Builder()
-                .client(mOkHttpClient)
-                .addConverterFactory(LenientGsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(Constant.API_BASE_URL_QUAPP)
-                .build();
-        mRetrofitByBiquge = new Retrofit.Builder()
-                .client(mOkHttpClient)
-                .addConverterFactory(LenientGsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(Constant.API_BASE_URL_QUAPP)
                 .build();
         mRetrofitByOwn= new Retrofit.Builder()
                 .client(mOkHttpClient)
@@ -113,14 +82,6 @@ public class RemoteHelper {
 
     public Retrofit getRetrofit() {
         return mRetrofit;
-    }
-
-    public Retrofit getRetrofitByBiqugeSearch() {
-        return mRetrofitByBiqugeSearch;
-    }
-
-    public Retrofit getRetrofitByBiquge() {
-        return mRetrofitByBiquge;
     }
 
     public Retrofit getRetrofitByOwn() {

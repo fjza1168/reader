@@ -16,7 +16,6 @@ public interface ReadContract extends BaseContract{
     interface View extends BaseContract.BaseView {
         void showCategory(List<BookChapterBean> bookChapterList,String bookId ,boolean isBiqugeLoaded);
         void finishChapter(boolean isRefresh);
-
         void errorChapter();
     }
 
@@ -24,9 +23,5 @@ public interface ReadContract extends BaseContract{
         void loadCategory(String bookId);
         void loadChapter(String bookId,List<TxtChapter> bookChapterList);
         void refreshChapter(String bookId, TxtChapter bookChapter , int sourceIndex);
-
-
-        void loadCategoryInBiquge(String bookId);
-
     }
 }

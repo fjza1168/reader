@@ -49,7 +49,7 @@ public interface BookApiOwn {
     /**
      * 获取书籍详情(批量)
      *
-     * @param bookIdList:书籍ID列表
+     * @param body:书籍ID列表
      * @return
      */
     @POST("/getBookInfoBatch")

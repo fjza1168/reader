@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.ldp.reader.App;
@@ -30,14 +27,12 @@ import com.ldp.reader.R;
 import com.ldp.reader.RxBus;
 import com.ldp.reader.event.BookSyncEvent;
 import com.ldp.reader.ui.base.BaseActivity;
-import com.ldp.reader.ui.base.BaseTabActivity;
 import com.ldp.reader.ui.dialog.SexChooseDialog;
 import com.ldp.reader.ui.fragment.BookShelfFragment;
 import com.ldp.reader.ui.fragment.CommunityFragment;
 import com.ldp.reader.ui.fragment.FindFragment;
 import com.ldp.reader.utils.Constant;
 import com.ldp.reader.utils.PermissionsChecker;
-import com.ldp.reader.utils.SchedulerUtils;
 import com.ldp.reader.utils.SharedPreUtils;
 import com.ldp.reader.utils.SystemBarUtils;
 import com.ldp.reader.utils.ToastUtils;
@@ -77,7 +72,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private PermissionsChecker mPermissionsChecker;
     /*****************Params*********************/
     private boolean isPrepareFinish = false;
-    private Intent intent;
 
 
     @Override
@@ -109,11 +103,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mFragmentList.add(bookShelfFragment);
         mFragmentList.add(communityFragment);
         mFragmentList.add(discoveryFragment);
-        SchedulerUtils.cancelAlarm(App.getContext());
-        SchedulerUtils.cancelJobScheduler();
-
-//        intent=new Intent(this, RefreshService.class);
-//        initJobScheduler();
     }
 
     private void setUpTabLayout() {
@@ -127,12 +116,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         stMain.setTitles(mTitleList);
         stMain.setViewPager(mVp);
-        stMain.setOnTabListener(new ScrollTab.OnTabListener() {
-                @Override
-                public void onChange(int index, View v) {
-                    mVp.setCurrentItem(index, true);
-                }
-            });
+        stMain.setOnTabListener((index, v) -> mVp.setCurrentItem(index, true));
     }
 
 
@@ -146,8 +130,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void initWidget() {
         super.initWidget();
         //性别选择框
-//        showSexChooseDialog();
-//        SystemBarUtils.expandStatusBar(this);
         SystemBarUtils.showStableStatusBar(this);
         SystemBarUtils.transparentStatusBar(this);
     }
@@ -283,10 +265,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             isPrepareFinish = true;
             Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
         } else {
-//            jobScheduler.schedule(builder.build());
-            SchedulerUtils.setWakeAtTime(App.getContext(), 0);
-
-
             super.onBackPressed();
         }
     }
@@ -311,13 +289,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-//                int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-//        Window window = getWindow();
-//        View decorView = window.getDecorView();
-//        decorView.setSystemUiVisibility(uiOptions);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(Color.TRANSPARENT);
     }
 
     /******************inner class*****************/

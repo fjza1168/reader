@@ -60,25 +60,17 @@ public class RemoteRepository {
     private static final String TAG = "RemoteRepository";
 
     private static RemoteRepository sInstance;
-    private Retrofit mRetrofit, mRetrofitByBiqugeSearch, mRetrofitByBiquge, mRetrofitByOwn;
+    private Retrofit mRetrofit, mRetrofitByOwn;
     private BookApi mBookApi;
-    private BookApiByBiquge mBookApiByBiquge;
-    private BookApiByBiqugeSearch mBookApiByBiqugeSearch;
     private BookApiOwn mBookApiOwn;
 
 
     private RemoteRepository() {
         mRetrofit = RemoteHelper.getInstance()
                 .getRetrofit();
-        mRetrofitByBiqugeSearch = RemoteHelper.getInstance()
-                .getRetrofitByBiqugeSearch();
-        mRetrofitByBiquge = RemoteHelper.getInstance()
-                .getRetrofitByBiquge();
         mRetrofitByOwn = RemoteHelper.getInstance()
                 .getRetrofitByOwn();
         mBookApi = mRetrofit.create(BookApi.class);
-        mBookApiByBiquge = mRetrofitByBiquge.create(BookApiByBiquge.class);
-        mBookApiByBiqugeSearch = mRetrofitByBiqugeSearch.create(BookApiByBiqugeSearch.class);
         mBookApiOwn = mRetrofitByOwn.create(BookApiOwn.class);
     }
 
@@ -387,67 +379,6 @@ public class RemoteRepository {
 
     }
 
-    /**
-     * 查询书籍
-     *
-     * @param query:书名|作者名
-     * @return
-     */
-    public Single<List<SearchBookPackage.BooksBean>> getSearchBooks(String query) {
-        return mBookApi.getSearchBookPackage(query)
-                .map(new Function<SearchBookPackage, List<SearchBookPackage.BooksBean>>() {
-                    @Override
-                    public List<SearchBookPackage.BooksBean> apply(SearchBookPackage bean) throws Exception {
-                        return bean.getBooks();
-                    }
-                });
-    }
 
-    /**
-     * 查询书籍
-     *
-     * @param query:书名|作者名
-     * @return
-     */
-    public Single<List<SearchBookPackageByBiquge.DataBean>> getSearchBooksByBiqugeSearch(String query) {
-        return mBookApiByBiqugeSearch.getSearchBookPackageByBiquge(query, "1", "app2")
-                .map(new Function<SearchBookPackageByBiquge, List<SearchBookPackageByBiquge.DataBean>>() {
-                    @Override
-                    public List<SearchBookPackageByBiquge.DataBean> apply(SearchBookPackageByBiquge searchBookPackage) throws Exception {
-                        return searchBookPackage.getData();
-                    }
-                });
-    }
-
-    /**
-     * 获取书籍详情
-     *
-     * @param bookId:书籍id
-     * @return
-     */
-    public Single<BookDetailBeanInBiquge> getBookDetailByBiquge(String bookId) {
-        return mBookApiByBiquge.geBookDetailByBiquge(bookId);
-    }
-
-    /**
-     * 获取书籍目录列表
-     *
-     * @param bookId:书籍id
-     * @return
-     */
-    public Single<BookChapterPackageByBiquge> getChapterListByBiquge(String bookId) {
-        return mBookApiByBiquge.getChapterListByBiquge(bookId);
-    }
-
-    /**
-     * 获取书籍章节内容
-     *
-     * @param bookId:书籍id
-     * @param chapterId:章节id
-     * @return
-     */
-    public Single<BookChapterBeanByBiquge> getChapterByBiquge(String bookId, String chapterId) {
-        return mBookApiByBiquge.getChapterByBiquge(bookId, chapterId);
-    }
 
 }

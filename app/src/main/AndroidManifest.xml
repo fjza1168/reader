@@ -61,11 +61,6 @@
         <activity android:name="com.ldp.reader.ui.activity.LoginActivity" />
 
         <service android:name="com.ldp.reader.service.DownloadService" />
-        <service android:name="com.ldp.reader.service.RefreshService"
-            android:process=":RefreshService"/>
-        <service android:name="com.ldp.reader.service.RefreshJobService"
-            android:process=":RefreshJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
     </application>
 
