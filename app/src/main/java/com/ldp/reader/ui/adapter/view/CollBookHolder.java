@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide;
 import com.ldp.reader.R;
 import com.ldp.reader.model.bean.CollBookBean;
 import com.ldp.reader.ui.base.adapter.ViewHolderImpl;
+import com.ldp.reader.utils.Constant;
+import com.ldp.reader.utils.StringUtils;
 
 /**
  * Created by ldp on 17-5-8.
@@ -60,16 +62,18 @@ public class CollBookHolder extends ViewHolderImpl<CollBookBean>{
         mTvName.setText(value.getTitle());
         if (!value.isLocal()){
             //时间
-//            mTvTime.setText(StringUtils.
-//                    dateConvert(value.getUpdated(), Constant.FORMAT_BOOK_DATE)+":");
-            mTvTime.setText(value.getUpdated() +"  ");
+            try {
+                mTvTime.setText(StringUtils.dateConvert(StringUtils.dateConvert( Long.parseLong(value.getUpdated()), Constant.FORMAT_BOOK_DATE), Constant.FORMAT_BOOK_DATE));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             mTvTime.setVisibility(View.VISIBLE);
         }
         else {
             mTvTime.setText("阅读进度:");
         }
         //章节
-        mTvChapter.setText(value.getLastChapter());
+        mTvChapter.setText(String.format("  %s", value.getLastChapter()));
         //我的想法是，在Collection中加一个字段，当追更的时候设置为true。当点击的时候设置为false。
         //当更新的时候，最新数据跟旧数据进行比较，如果更新的话，设置为true。
         if (value.isUpdate()){

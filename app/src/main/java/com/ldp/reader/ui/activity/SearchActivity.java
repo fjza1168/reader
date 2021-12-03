@@ -1,5 +1,7 @@
 package com.ldp.reader.ui.activity;
 
+import static android.view.KeyEvent.ACTION_UP;
+
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +37,7 @@ import me.gujun.android.taggroup.TagGroup;
  */
 
 public class SearchActivity extends BaseMVPActivity<SearchContract.Presenter>
-        implements SearchContract.View{
+        implements SearchContract.View {
     private static final String TAG = "SearchActivity";
     private static final int TAG_LIMIT = 8;
 
@@ -51,10 +53,8 @@ public class SearchActivity extends BaseMVPActivity<SearchContract.Presenter>
     TextView mTvRefreshHot;
     @BindView(R.id.search_tg_hot)
     TagGroup mTgHot;
-/*    @BindView(R.id.search_rv_history)
-    RecyclerView mRvHistory;*/
     @BindView(R.id.refresh_layout)
-RefreshLayout mRlRefresh;
+    RefreshLayout mRlRefresh;
     @BindView(R.id.refresh_rv_content)
     RecyclerView mRvSearch;
 
@@ -79,10 +79,10 @@ RefreshLayout mRlRefresh;
     protected void initWidget() {
         super.initWidget();
         setUpAdapter();
-        mRlRefresh.setBackground(ContextCompat.getDrawable(this,R.color.white));
+        mRlRefresh.setBackground(ContextCompat.getDrawable(this, R.color.white));
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mKeyWordAdapter = new KeyWordAdapter();
         mSearchAdapter = new SearchBookAdapter();
 
@@ -108,9 +108,9 @@ RefreshLayout mRlRefresh;
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().equals("")){
+                if (s.toString().trim().equals("")) {
                     //隐藏delete按钮和关键字显示内容
-                    if (mIvDelete.getVisibility() == View.VISIBLE){
+                    if (mIvDelete.getVisibility() == View.VISIBLE) {
                         mIvDelete.setVisibility(View.INVISIBLE);
                         mRlRefresh.setVisibility(View.INVISIBLE);
                         //删除全部视图
@@ -121,7 +121,7 @@ RefreshLayout mRlRefresh;
                     return;
                 }
                 //显示delete按钮
-                if (mIvDelete.getVisibility() == View.INVISIBLE){
+                if (mIvDelete.getVisibility() == View.INVISIBLE) {
                     mIvDelete.setVisibility(View.VISIBLE);
                     mRlRefresh.setVisibility(View.VISIBLE);
                     //默认是显示完成状态
@@ -129,12 +129,11 @@ RefreshLayout mRlRefresh;
                 }
                 //搜索
                 String query = s.toString().trim();
-                if (isTag){
+                if (isTag) {
                     mRlRefresh.showLoading();
 //                    mPresenter.searchBook(query);
                     isTag = false;
-                }
-                else {
+                } else {
                     //传递
                     mPresenter.searchKeyWord(query);
                 }
@@ -147,16 +146,13 @@ RefreshLayout mRlRefresh;
         });
 
         //键盘的搜索
-        mEtInput.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                //修改回车键功能
-                if(keyCode==KeyEvent.KEYCODE_ENTER) {
-//                    searchBook();
-                    return true;
-                }
-                return false;
+        mEtInput.setOnKeyListener((v, keyCode, event) -> {
+            //修改回车键功能
+            if (event.getAction() == ACTION_UP && (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_SEARCH)) {
+                searchBook();
+                return true;
             }
+            return false;
         });
 
         //进行搜索
@@ -166,7 +162,7 @@ RefreshLayout mRlRefresh;
 
         //删除字
         mIvDelete.setOnClickListener(
-                (v) ->  {
+                (v) -> {
                     mEtInput.setText("");
                     toggleKeyboard();
                 }
@@ -178,7 +174,7 @@ RefreshLayout mRlRefresh;
                     //显示正在加载
                     mRlRefresh.showLoading();
                     String book = mKeyWordAdapter.getItem(pos);
-//                    mPresenter.searchBook(book);
+                    mPresenter.searchBook(book);
                     toggleKeyboard();
                 }
         );
@@ -200,14 +196,14 @@ RefreshLayout mRlRefresh;
         mSearchAdapter.setOnItemClickListener(
                 (view, pos) -> {
                     String bookId = mSearchAdapter.getItem(pos).getId();
-                    BookDetailActivity.startActivity(this,bookId);
+                    BookDetailActivity.startActivity(this, bookId);
                 }
         );
     }
 
-    private void searchBook(){
+    private void searchBook() {
         String query = mEtInput.getText().toString().trim();
-        if(!query.equals("")){
+        if (!query.equals("")) {
             mRlRefresh.setVisibility(View.VISIBLE);
             mRlRefresh.showLoading();
             mPresenter.searchBook(query);
@@ -217,7 +213,7 @@ RefreshLayout mRlRefresh;
         }
     }
 
-    private void toggleKeyboard(){
+    private void toggleKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
@@ -246,23 +242,21 @@ RefreshLayout mRlRefresh;
     public void finishHotWords(List<String> hotWords) {
         mHotTagList = hotWords;
         Log.d(TAG, "finishHotWords: " + hotWords);
-//        mTgHot.setTags(hotWords);
-
         refreshTag();
     }
 
-    private void refreshTag(){
+    private void refreshTag() {
         int last = mTagStart + TAG_LIMIT;
-        if (mHotTagList.size() <= last){
+        if (mHotTagList.size() <= last) {
             mTagStart = 0;
             last = TAG_LIMIT;
         }
-        if(mHotTagList.size() <=TAG_LIMIT){
+        if (mHotTagList.size() <= TAG_LIMIT) {
             last = mHotTagList.size();
         }
-        Log.d(TAG, "refreshTag: mHotTagList" + mHotTagList );
-        Log.d(TAG, "refreshTag: mTagStart " + mTagStart );
-        Log.d(TAG, "refreshTag: last" + last );
+        Log.d(TAG, "refreshTag: mHotTagList" + mHotTagList);
+        Log.d(TAG, "refreshTag: mTagStart " + mTagStart);
+        Log.d(TAG, "refreshTag: last" + last);
 
 
         List<String> tags = mHotTagList.subList(mTagStart, last);
@@ -276,59 +270,27 @@ RefreshLayout mRlRefresh;
             mRlRefresh.setVisibility(View.INVISIBLE);
         }
         mKeyWordAdapter.refreshItems(keyWords);
-        if (!(mRvSearch.getAdapter() instanceof KeyWordAdapter)){
+        if (!(mRvSearch.getAdapter() instanceof KeyWordAdapter)) {
             mRvSearch.setAdapter(mKeyWordAdapter);
         }
     }
 
-//    @Override
-//    public void finishBooks(List<SearchBookPackageByBiquge.DataBean> books) {
-//        mSearchAdapter.refreshItems(books);
-//        if (books.size() == 0){
-//            mRlRefresh.showEmpty();
-//        }
-//        else {
-//            //显示完成
-//            mRlRefresh.showFinish();
-//        }
-//        //加载
-//        if (!(mRvSearch.getAdapter() instanceof SearchBookAdapter)){
-//            mRvSearch.setAdapter(mSearchAdapter);
-//        }
-//    }
 
     @Override
     public void finishBooks(List<BookSearchResult> books) {
         mSearchAdapter.refreshItems(books);
-        if (books.size() == 0){
+        if (books.size() == 0) {
             mRlRefresh.showEmpty();
-        }
-        else {
+        } else {
             //显示完成
             mRlRefresh.showFinish();
         }
         //加载
-        if (!(mRvSearch.getAdapter() instanceof SearchBookAdapter)){
+        if (!(mRvSearch.getAdapter() instanceof SearchBookAdapter)) {
             mRvSearch.setAdapter(mSearchAdapter);
         }
     }
 
-//    @Override
-//    public void finishBooks(List<SearchBookPackage.BooksBean> books) {
-//        mSearchAdapter.refreshItems(books);
-//        if (books.size() == 0){
-//            mRlRefresh.showEmpty();
-//        }
-//        else {
-//            //显示完成
-//            mRlRefresh.showFinish();
-//        }
-//        //加载
-//        if (!(mRvSearch.getAdapter() instanceof SearchBookAdapter)){
-//            mRvSearch.setAdapter(mSearchAdapter);
-//        }
-//    }
-//
 
     @Override
     public void errorBooks() {
@@ -337,10 +299,9 @@ RefreshLayout mRlRefresh;
 
     @Override
     public void onBackPressed() {
-        if (mRlRefresh.getVisibility() == View.VISIBLE){
+        if (mRlRefresh.getVisibility() == View.VISIBLE) {
             mEtInput.setText("");
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

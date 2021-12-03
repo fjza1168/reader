@@ -161,7 +161,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         Disposable disposable = Single.concat(bookDetailSingleList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bookDetailBeanInOwn -> addToBookShelf(bookDetailBeanInOwn.getCollBookBean()), throwable -> mView.showErrorTip(throwable.getMessage()), () -> {
+                .subscribe(this::addToBookShelf, throwable -> mView.showErrorTip(throwable.getMessage()), () -> {
                     List<CollBookBean> collBooks = BookRepository.getInstance().getCollBooks();
                     List<String> bookIds = new ArrayList<>();
                     for (CollBookBean collBookBean : collBooks) {
@@ -179,7 +179,9 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     }
 
 
-    private void addToBookShelf(CollBookBean collBookBean) {
+    private void addToBookShelf(BookDetailBeanInOwn bookDetailBeanInOwn) {
+       final CollBookBean  collBookBean = bookDetailBeanInOwn.getCollBookBean();
+        collBookBean.setUpdated(bookDetailBeanInOwn.getUpdateTime() + "");
         List<BookChapterBean> bookChapterBeans = new ArrayList<>();
         BookRepository.getInstance()
                 .saveCollBookWithAsync(collBookBean);
@@ -316,8 +318,6 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                         if (!oldCollBook.getLastChapter().equals(bookDetailBeanInOwn.getLastChapter())) {
                             updateBookInfo(bookDetailBeanInOwn, oldCollBook);
                             newCollBooksMerge.add(oldCollBook);
-                        } else {
-                            oldCollBook.setUpdate(false);
                         }
                         Log.d(TAG, "+检查更新");
                     }
@@ -335,7 +335,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         updateCategory(oldCollBook);
         Vibrator vibrator = (Vibrator) App.getContext().getSystemService(App.getContext().VIBRATOR_SERVICE);
         vibrator.vibrate(400);
-        oldCollBook.setUpdated(StringUtils.dateConvert(StringUtils.dateConvert(bookDetailBeanInOwn.getUpdateTime(), Constant.FORMAT_BOOK_DATE), Constant.FORMAT_BOOK_DATE));
+        oldCollBook.setUpdated(bookDetailBeanInOwn.getUpdateTime() + "");
     }
 
 
@@ -364,6 +364,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                             .saveCollBookWithAsync(collBookBean);
 
                 }, Throwable::printStackTrace);
+        addDisposable(disposable);
     }
 
 }

@@ -49,15 +49,12 @@ public class SearchPresenter extends RxPresenter<SearchContract.View>
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        new Consumer<List<String>>() {
-                            @Override
-                            public void accept(List<String> bean) throws Exception {
-                                Log.d("+bean", bean.toString());
+                        bean -> {
+                            Log.d("+bean", bean.toString());
 
-                                mView.finishKeyWords(bean);
-                                LogUtils.d("+bean", bean);
+                            mView.finishKeyWords(bean);
+                            LogUtils.d("+bean", bean);
 
-                            }
                         },
                         e -> {
                             LogUtils.e(e);
@@ -67,54 +64,14 @@ public class SearchPresenter extends RxPresenter<SearchContract.View>
     }
 
 
-//    @Override
-//    public void searchBook(String query) {
-//        Disposable disp = RemoteRepository.getInstance()
-//                .getSearchBooks(query)
-//                .compose(RxUtils::toSimpleSingle)
-//                .subscribe(
-//                        (List<SearchBookPackage.BooksBean> bean) -> {
-//                            Log.d("+bean", bean.toString());
-//                            mView.finishBooks(bean);
-//                            LogUtils.d("+bean", bean);
-//
-//                        },
-//                        e -> {
-//                            LogUtils.e(e);
-//                            mView.errorBooks();
-//                        }
-//                );
-//        addDisposable(disp);
-//    }
-
 
     @Override
     public void searchBook(String query) {
         Log.d(TAG, "searchBook: " + query);
-//        Disposable disp = RemoteRepository.getInstance()
-//                .getSearchBooksByBiqugeSearch(query)
-//                .compose(RxUtils::toSimpleSingle)
-//                .subscribe(new Consumer<List<SearchBookPackageByBiquge.DataBean>>() {
-//                    @Override
-//                    public void accept(List<SearchBookPackageByBiquge.DataBean> dataBeans) throws Exception {
-//                        Log.d("+bean", dataBeans.toString());
-//                            mView.finishBooks(dataBeans);
-//                            LogUtils.d("+bean", dataBeans);
-//                    }
-//                }, throwable -> {
-//                    LogUtils.e(throwable);
-//                        mView.errorBooks();
-//                });
-
         Disposable disp = RemoteRepository.getInstance()
                 .getSearchResult(query)
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Consumer<List<BookSearchResult>>() {
-                    @Override
-                    public void accept(List<BookSearchResult> bookSearchResults) throws Exception {
-                        mView.finishBooks(bookSearchResults);
-                    }
-                }, throwable -> {
+                .subscribe(bookSearchResults -> mView.finishBooks(bookSearchResults), throwable -> {
                     LogUtils.e(throwable);
                     mView.errorBooks();
                 });

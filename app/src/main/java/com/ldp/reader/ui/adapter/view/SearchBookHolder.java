@@ -28,11 +28,7 @@ public class SearchBookHolder extends ViewHolderImpl<BookSearchResult> {
     @Override
     public void onBind(BookSearchResult book, int pos) {
         //显示图片
-//        Glide.with(getContext())
-//                .load(Constant.IMG_BASE_URL + data.getCover())
-//                .placeholder(R.drawable.ic_book_loading)
-//                .error(R.drawable.ic_load_error)
-//                .into(mIvCover);
+
         Glide.with(getContext())
                 .load(book.getCover())
                 .placeholder(R.drawable.ic_book_loading)
@@ -40,8 +36,6 @@ public class SearchBookHolder extends ViewHolderImpl<BookSearchResult> {
                 .into(mIvCover);
         mTvName.setText(book.getTitle());
 
-//        mTvBrief.setText(getContext().getString(R.string.nb_search_book_brief,
-//                data.getLatelyFollower(),data.getRetentionRatio(),data.getAuthor()));
         mTvBrief.setText(getContext().getString(R.string.nb_search_book_brief,
                book.getAuthor(),"",book.getDesc()));
     }
