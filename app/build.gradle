@@ -88,11 +88,6 @@ greendao {
     targetGenDir 'src/main/java'
 }
 
-repositories {
-    maven {
-        url 'https://dl.bintray.com/qichuan/maven/'
-    }
-}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
