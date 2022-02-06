@@ -104,6 +104,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         addDisposable(disposable);
     }
 
+    @Deprecated
     @Override
     public void getBookShelf(String token) {
         Disposable disposable = RemoteRepository.getInstance()
@@ -134,11 +135,16 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(
                         bookIdBeans -> {
-                            List<String> bookIdList = new ArrayList<>();
+//                            List<String> bookIdList = new ArrayList<>();
+//                            for (BookIdBean bookIdBean : bookIdBeans) {
+//                                bookIdList.add(bookIdBean.getBookId() + "");
+//                            }
+//                            getBookInfo(bookIdList);
+                            List<Long> bookIdList = new ArrayList<>();
                             for (BookIdBean bookIdBean : bookIdBeans) {
-                                bookIdList.add(bookIdBean.getBookId() + "");
+                                bookIdList.add((long) bookIdBean.getBookId());
                             }
-                            getBookInfo(bookIdList);
+                            getBookInfoBatch(bookIdList);
                         },
                         e -> {
                             //提示没有网络
@@ -150,6 +156,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
         addDisposable(disposable);
     }
 
+    @Deprecated
     public void getBookInfo(List<String> bookIdList) {
         List<Single<BookDetailBeanInOwn>> bookDetailSingleList = new ArrayList<>();
         for (String bookId : bookIdList) {
@@ -180,7 +187,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
 
 
     private void addToBookShelf(BookDetailBeanInOwn bookDetailBeanInOwn) {
-       final CollBookBean  collBookBean = bookDetailBeanInOwn.getCollBookBean();
+        final CollBookBean collBookBean = bookDetailBeanInOwn.getCollBookBean();
         collBookBean.setUpdated(bookDetailBeanInOwn.getUpdateTime() + "");
         List<BookChapterBean> bookChapterBeans = new ArrayList<>();
         BookRepository.getInstance()
@@ -243,59 +250,6 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     }
 
 
-//    //需要修改
-//    @Override
-//    public void updateCollBooks(List<CollBookBean> collBookBeans) {
-//        Log.d(TAG, "+updateCollBooks ");
-//        if (collBookBeans == null || collBookBeans.isEmpty()) {
-//            return;
-//        }
-//        List<CollBookBean> collBooks = new ArrayList<>(collBookBeans);
-//        List<Single<BookDetailBeanInOwn>> observables = new ArrayList<>(collBooks.size());
-//        Iterator<CollBookBean> it = collBooks.iterator();
-//        while (it.hasNext()) {
-//            CollBookBean collBook = it.next();
-//            //删除本地文件
-//            if (collBook.isLocal()) {
-//                it.remove();
-//            } else {
-//                observables.add(RemoteRepository.getInstance().getBookInfo(collBook.get_id()));
-//                Log.d(TAG, "+笔趣阁ID " + collBook.getBookIdInBiquge());
-//            }
-//        }
-//
-//        List<CollBookBean> newCollBooksMerge = new ArrayList<>(observables.size());
-//        Disposable chaptersDispoable = Single.concat(observables)
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(bookDetailBeanInOwn -> {
-//                    CollBookBean oldCollBook = BookRepository.getInstance().getCollBook(String.valueOf(bookDetailBeanInOwn.getBookId()));
-//                    if (!oldCollBook.getLastChapter().equals(bookDetailBeanInOwn.getLastChapter())) {
-//                        oldCollBook.setLastChapter(bookDetailBeanInOwn.getLastChapter());
-//                        Log.d(TAG, "+更新书籍 " + oldCollBook.getTitle() + oldCollBook.getLastChapter());
-//                        oldCollBook.setUpdate(true);
-//                        updateCategory(oldCollBook);
-//                        Vibrator vibrator = (Vibrator) App.getContext().getSystemService(App.getContext().VIBRATOR_SERVICE);
-//                        vibrator.vibrate(400);
-//                    } else {
-//                        oldCollBook.setUpdate(false);
-//                    }
-//                    oldCollBook.setUpdated(StringUtils.dateConvert(StringUtils.dateConvert(bookDetailBeanInOwn.getUpdateTime(), Constant.FORMAT_BOOK_DATE), Constant.FORMAT_BOOK_DATE));
-//                    newCollBooksMerge.add(oldCollBook);
-//                    Log.d(TAG, "+检查更新");
-//                }, throwable -> {
-//
-//                }, () -> {
-////                                异步存储到数据库中
-//                    BookRepository.getInstance().saveCollBooks(newCollBooksMerge);
-//                    mView.complete();
-//                    mView.finishUpdate();
-//
-//                });
-//        addDisposable(chaptersDispoable);
-//    }
-
-
     @Override
     public void updateCollBooks(List<CollBookBean> collBookBeans) {
         if (collBookBeans == null || collBookBeans.isEmpty()) {
@@ -308,6 +262,10 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                 bookIdList.add(Long.valueOf(collBook.get_id()));
             }
         }
+        updateBookInfoBatch(bookIdList);
+    }
+
+    private void updateBookInfoBatch(List<Long> bookIdList) {
         List<CollBookBean> newCollBooksMerge = new ArrayList<>();
         RequestBody body = RequestBody.create(JSON, new Gson().toJson(bookIdList));
         Disposable disposable = RemoteRepository.getInstance().getBookInfoBatch(body)
@@ -326,6 +284,34 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
                     mView.finishUpdate();
                 }, Throwable::printStackTrace);
         addDisposable(disposable);
+    }
+
+    private void getBookInfoBatch(List<Long> bookIdList) {
+        RequestBody body = RequestBody.create(JSON, new Gson().toJson(bookIdList));
+        Disposable disposable = RemoteRepository.getInstance().getBookInfoBatch(body)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(bookDetailBeanInOwns -> {
+                    for (BookDetailBeanInOwn bookDetailBeanInOwn : bookDetailBeanInOwns) {
+                        addToBookShelf(bookDetailBeanInOwn);
+                    }
+
+                    updateShelf();
+                }, Throwable::printStackTrace);
+        addDisposable(disposable);
+    }
+
+    /**
+     * 更新书架,将未登录时的添加书籍同步给服务器
+     */
+    private void updateShelf() {
+        List<CollBookBean> collBooks = BookRepository.getInstance().getCollBooks();
+        List<String> bookIds = new ArrayList<>();
+        for (CollBookBean collBookBean : collBooks) {
+            bookIds.add(collBookBean.get_id());
+        }
+        String mobile = SharedPreUtils.getInstance().getString("userName");
+        String mobileToken = SharedPreUtils.getInstance().getString("token");
+        setBookShelfByMobile(bookIds, mobile, mobileToken);
     }
 
     private void updateBookInfo(BookDetailBeanInOwn bookDetailBeanInOwn, CollBookBean oldCollBook) {
