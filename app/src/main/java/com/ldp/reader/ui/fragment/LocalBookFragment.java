@@ -1,8 +1,8 @@
 package com.ldp.reader.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ldp.reader.R;
 import com.ldp.reader.model.local.BookRepository;

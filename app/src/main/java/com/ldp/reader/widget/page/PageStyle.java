@@ -1,6 +1,6 @@
 package com.ldp.reader.widget.page;
 
-import android.support.annotation.ColorRes;
+import androidx.annotation.ColorRes;
 
 import com.ldp.reader.R;
 

@@ -2,7 +2,7 @@ package com.ldp.reader.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by ldp on 2017/10/8.

@@ -55,7 +55,7 @@ public class CommentHolder extends ViewHolderImpl<CommentBean>{
                 .load(Constant.IMG_BASE_URL+value.getAuthor().getAvatar())
                 .placeholder(R.drawable.ic_loadding)
                 .error(R.drawable.ic_load_error)
-                .transform(new CircleTransform(getContext()))
+                .transform(new CircleTransform())
                 .into(ivPortrait);
         //名字
         tvName.setText(value.getAuthor().getNickname());

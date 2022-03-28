@@ -2,7 +2,7 @@ package com.ldp.reader.utils.media;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.content.CursorLoader;
+import androidx.loader.content.CursorLoader;
 
 /**
  * Created by ldp on 2018/1/14.

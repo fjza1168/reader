@@ -1,6 +1,6 @@
 package com.ldp.reader.ui.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.ldp.reader.ui.adapter.view.HorizonTagHolder;

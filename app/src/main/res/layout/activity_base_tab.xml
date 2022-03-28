@@ -7,12 +7,12 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<android.support.design.widget.CoordinatorLayout
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-		<android.support.design.widget.AppBarLayout
+		<com.google.android.material.appbar.AppBarLayout
 			android:id="@+id/appbar"
 			android:background="@color/colorPrimary"
 			android:layout_width="match_parent"
@@ -24,7 +24,7 @@
 				android:background="@color/colorPrimary"
 				app:layout_scrollFlags="scroll|enterAlways">
 			</View>
-			<android.support.v7.widget.Toolbar
+			<androidx.appcompat.widget.Toolbar
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="?attr/actionBarSize"
@@ -33,9 +33,9 @@
 				android:fitsSystemWindows="true"
 				android:theme="@style/Theme.ToolBar.Menu"
 				app:layout_scrollFlags="scroll|enterAlways">
-			</android.support.v7.widget.Toolbar>
+			</androidx.appcompat.widget.Toolbar>
 
-			<android.support.design.widget.TabLayout
+			<com.google.android.material.tabs.TabLayout
 				android:visibility="gone"
 				android:id="@+id/tab_tl_indicator"
 				android:layout_width="match_parent"
@@ -45,7 +45,7 @@
 				app:tabIndicatorColor="@color/white"
 				app:tabSelectedTextColor="@color/white"
 				app:tabTextColor="@color/translucent_text">
-			</android.support.design.widget.TabLayout>
+			</com.google.android.material.tabs.TabLayout>
 			<com.ldp.reader.widget.tab.ScrollTab
 				android:id="@+id/st_main"
 				android:layout_width="match_parent"
@@ -61,15 +61,15 @@
 				app:lib_pub_stab_indicatorWeight="4dp"
 				app:lib_pub_stab_indicatorWidth="40dp"
 				app:lib_pub_stab_type="view_group" />
-		</android.support.design.widget.AppBarLayout>
+		</com.google.android.material.appbar.AppBarLayout>
 
-		<android.support.v4.view.ViewPager
+		<androidx.viewpager.widget.ViewPager
 			android:id="@+id/tab_vp"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			app:layout_behavior="@string/appbar_scrolling_view_behavior">
-		</android.support.v4.view.ViewPager>
-	</android.support.design.widget.CoordinatorLayout>
+		</androidx.viewpager.widget.ViewPager>
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 <!--	<android.support.v4.view.ViewPager-->
 <!--		android:id="@+id/tab_vp"-->
 <!--		android:layout_width="match_parent"-->

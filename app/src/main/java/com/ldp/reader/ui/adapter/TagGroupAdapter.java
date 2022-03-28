@@ -1,6 +1,6 @@
 package com.ldp.reader.ui.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ldp.reader.model.bean.BookTagBean;
 import com.ldp.reader.ui.adapter.view.TagChildHolder;

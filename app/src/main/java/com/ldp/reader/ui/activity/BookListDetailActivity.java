@@ -3,9 +3,9 @@ package com.ldp.reader.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -216,7 +216,7 @@ public class BookListDetailActivity extends BaseMVPActivity<BookListDetailContra
                     .load(Constant.IMG_BASE_URL+detailBean.getAuthor().getAvatar())
                     .placeholder(R.drawable.ic_loadding)
                     .error(R.drawable.ic_load_error)
-                    .transform(new CircleTransform(App.getContext()))
+                    .transform(new CircleTransform())
                     .into(ivPortrait);
             //作者
             tvAuthor.setText(detailBean.getAuthor().getNickname());

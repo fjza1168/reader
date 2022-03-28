@@ -50,7 +50,7 @@ public class DiscCommentHolder extends ViewHolderImpl<BookCommentBean>{
                 .load(Constant.IMG_BASE_URL+value.getAuthorBean().getAvatar())
                 .placeholder(R.drawable.ic_default_portrait)
                 .error(R.drawable.ic_load_error)
-                .transform(new CircleTransform(App.getContext()))
+                .transform(new CircleTransform())
                 .into(mIvPortrait);
         //名字
         mTvName.setText(value.getAuthorBean().getNickname());

@@ -48,7 +48,7 @@ public class DiscHelpsHolder extends ViewHolderImpl<BookHelpsBean> {
                 .load(Constant.IMG_BASE_URL+value.getAuthorBean().getAvatar())
                 .placeholder(R.drawable.ic_default_portrait)
                 .error(R.drawable.ic_load_error)
-                .transform(new CircleTransform(getContext()))
+                .transform(new CircleTransform())
                 .into(mIvPortrait);
         //名字
         mTvName.setText(value.getAuthorBean().getNickname());

@@ -1,6 +1,6 @@
 package com.ldp.reader.utils;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import com.ldp.reader.App;
 

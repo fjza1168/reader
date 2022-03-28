@@ -1,6 +1,6 @@
 package com.ldp.reader.model.flag;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import com.ldp.reader.App;
 import com.ldp.reader.R;

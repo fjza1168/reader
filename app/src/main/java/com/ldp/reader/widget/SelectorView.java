@@ -1,7 +1,7 @@
 package com.ldp.reader.widget;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,8 +119,8 @@ public class SelectorView extends LinearLayout {
                     .inflate(R.layout.view_selector,this,false);
             addView(view);
 
-            tvSelected = ButterKnife.findById(view,R.id.selector_tv_selected);
-            ivArrow = ButterKnife.findById(view, R.id.selector_iv_arrow);
+            tvSelected = view.findViewById(R.id.selector_tv_selected);
+            ivArrow = view.findViewById( R.id.selector_iv_arrow);
             ivArrow.setScaleType(ImageView.ScaleType.MATRIX);
         }
 
@@ -236,7 +236,7 @@ public class SelectorView extends LinearLayout {
                     convertView = LayoutInflater.from(getContext())
                             .inflate(R.layout.item_selector,null,false);
                     holder = new ViewHolder();
-                    holder.tvName = ButterKnife.findById(convertView,R.id.selector_tv_type);
+                    holder.tvName = convertView.findViewById(R.id.selector_tv_type);
                     convertView.setTag(holder);
                 }
                 else {

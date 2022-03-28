@@ -1,6 +1,6 @@
 package com.ldp.reader.ui.adapter.view;
 
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.widget.TextView;
 
 import com.ldp.reader.R;

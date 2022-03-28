@@ -1,6 +1,6 @@
 package com.ldp.reader.ui.activity;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ldp.reader.R;
 import com.ldp.reader.ui.base.BaseActivity;

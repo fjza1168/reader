@@ -1,7 +1,7 @@
 package com.ldp.reader.ui.base.adapter;
 
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 

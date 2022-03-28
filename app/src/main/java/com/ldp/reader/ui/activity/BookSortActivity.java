@@ -1,8 +1,8 @@
 package com.ldp.reader.ui.activity;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ldp.reader.R;
 import com.ldp.reader.model.bean.packages.BookSortPackage;

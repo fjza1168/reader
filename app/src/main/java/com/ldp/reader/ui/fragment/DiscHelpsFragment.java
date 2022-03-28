@@ -1,7 +1,7 @@
 package com.ldp.reader.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.ldp.reader.R;
 import com.ldp.reader.RxBus;

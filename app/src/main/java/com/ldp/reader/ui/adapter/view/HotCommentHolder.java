@@ -46,7 +46,7 @@ public class HotCommentHolder extends ViewHolderImpl<HotCommentBean>{
                 .load(Constant.IMG_BASE_URL+value.getAuthor().getAvatar())
                 .placeholder(R.drawable.ic_default_portrait)
                 .error(R.drawable.ic_load_error)
-                .transform(new CircleTransform(getContext()))
+                .transform(new CircleTransform())
                 .into(mIvPortrait);
         //作者
         mTvAuthor.setText(value.getAuthor().getNickname());

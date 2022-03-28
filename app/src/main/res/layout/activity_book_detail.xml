@@ -329,7 +329,7 @@
 						android:textSize="15sp" />
 				</LinearLayout>
 				
-				<android.support.v7.widget.RecyclerView
+				<androidx.recyclerview.widget.RecyclerView
 					android:id="@+id/book_detail_rv_hot_comment"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -386,7 +386,7 @@
 					android:textColor="@color/nb.text.default"
 					android:textSize="15sp"/>
 				
-				<android.support.v7.widget.RecyclerView
+				<androidx.recyclerview.widget.RecyclerView
 					android:id="@+id/book_detail_rv_recommend_book_list"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"

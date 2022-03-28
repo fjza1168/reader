@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="这是上面的文本"/>
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </ScrollView>
 
 </RelativeLayout>

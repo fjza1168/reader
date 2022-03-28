@@ -1,6 +1,6 @@
 package com.ldp.reader.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ldp.reader.model.bean.CommentBean;
 import com.ldp.reader.model.bean.DetailBean;
