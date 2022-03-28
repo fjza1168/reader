@@ -2,20 +2,22 @@
 
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+
+        maven { url "https://mvn.mob.com/android" }
         mavenLocal()
         mavenCentral()
-        jcenter()
         google()
         maven { url 'https://jitpack.io' }
 
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath 'me.tatarka:gradle-retrolambda:3.6.0'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
-        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath "com.mob.sdk:MobSDK:2018.0319.1724"
 
 
@@ -27,10 +29,9 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/google/'}
+        maven { url 'https://maven.aliyun.com/repository/google/' }
 
         mavenLocal()
-        jcenter()
         mavenCentral()
         google()
         maven { url 'https://jitpack.io' }

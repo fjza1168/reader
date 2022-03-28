@@ -57,7 +57,6 @@ import com.ldp.reader.widget.page.TxtChapter;
 import java.util.List;
 
 import butterknife.BindView;
-import hugo.weaving.DebugLog;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiConsumer;
 
@@ -138,7 +137,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     //控制屏幕常亮
     private PowerManager.WakeLock mWakeLock;
     private Handler mHandler = new Handler() {
-        @DebugLog
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -677,7 +675,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mBottomOutAnim.setDuration(200);
     }
 
-    @DebugLog
     @Override
     protected void processLogic() {
         super.processLogic();
@@ -721,7 +718,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     }
 
-    @DebugLog
     @Override
     public void showCategory(List<BookChapterBean> bookChapters,String bookId,boolean isBiqugeLoaded) {
         mPageLoader.getCollBook().setBookChapters(bookChapters);
@@ -741,7 +737,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 //        }
     }
 
-    @DebugLog
     @Override
     public void finishChapter(boolean isRefresh) {
         if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING || isRefresh) {

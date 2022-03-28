@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleObserver;
@@ -286,7 +285,6 @@ protected boolean isInit = false;
      *
      * @param pos:从 0 开始。
      */
-    @DebugLog
     public void skipToChapter(int pos) {
         Log.d("+跳转","skipToChapter" + pos);
         // 设置参数
@@ -589,7 +587,6 @@ protected boolean isInit = false;
     /**
      * 初始化书籍
      */
-    @DebugLog
     private void prepareBook() {
         Log.d(TAG,"prepareBook" );
 
@@ -607,7 +604,6 @@ protected boolean isInit = false;
     /**
      * 打开指定章节
      */
-    @DebugLog
     public synchronized void openChapter() {
         Log.e(TAG,"+openChapter" );
 //           if(isInit)
@@ -945,7 +941,6 @@ protected boolean isInit = false;
         }
     }
 
-    @DebugLog
     void prepareDisplay(int w, int h) {
         Log.d(TAG,"prepareDisplay" );
 
@@ -1099,7 +1094,6 @@ protected boolean isInit = false;
         return true;
     }
 
-    @DebugLog
     synchronized  boolean   parseCurChapter() {
         Log.e(TAG,"parseCurChapter" );
 
@@ -1120,7 +1114,6 @@ protected boolean isInit = false;
      *
      * @return:返回解析成功还是失败
      */
-    @DebugLog
     boolean parseNextChapter() {
         int nextChapter = mCurChapterPos + 1;
 
@@ -1178,7 +1171,6 @@ protected boolean isInit = false;
         chapterChangeCallback();
     }
 
-    @DebugLog
     private void chapterChangeCallback() {
         if (mPageChangeListener != null) {
           Log.d("+回调","chapterChangeCallback");
@@ -1188,7 +1180,6 @@ protected boolean isInit = false;
     }
 
     // 预加载下一章
-    @DebugLog
    synchronized private void preLoadNextChapter() {
         Log.d("+加载下一章","preLoadNextChapter");
         int nextChapter = mCurChapterPos + 1;
@@ -1499,7 +1490,6 @@ protected boolean isInit = false;
          *
          * @param requestChapters:需要下载的章节列表
          */
-        @DebugLog
         void requestChapters(List<TxtChapter> requestChapters);
 
         /**

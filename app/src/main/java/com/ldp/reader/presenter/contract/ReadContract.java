@@ -6,7 +6,6 @@ import com.ldp.reader.widget.page.TxtChapter;
 
 import java.util.List;
 
-import hugo.weaving.DebugLog;
 
 /**
  * Created by ldp on 17-5-16.

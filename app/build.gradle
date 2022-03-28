@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'com.jakewharton.hugo'
 
 apply plugin: 'com.mob.sdk'
 
@@ -116,9 +115,6 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     // ImageLoader
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-//    implementation "com.github.bumptech.glide:okhttp3-integration:$rootProject.glideVersion"// 新增
-//    implementation "com.github.bumptech.glide:annotations:$rootProject.glideVersion" // 新增
-//    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     // ORM Database
     implementation "org.greenrobot:greendao:$rootProject.greendaoVersion"
@@ -132,7 +128,9 @@ dependencies {
     // Android Leak Analysis
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
     // CrashReport
-    implementation 'com.tencent.bugly:crashreport:2.8.6'
+
+    implementation "com.tencent.bugly:crashreport:$rootProject.buglyVersion" //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+//    implementation "com.tencent.bugly:nativecrashreport:$rootProject.buglyVersion"
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.airbnb.android:lottie:2.3.0'
     implementation('com.github.tbruyelle:rxpermissions:0.10.2', {

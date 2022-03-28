@@ -19,7 +19,6 @@ import com.ldp.reader.widget.animation.ScrollPageAnim;
 import com.ldp.reader.widget.animation.SimulationPageAnim;
 import com.ldp.reader.widget.animation.SlidePageAnim;
 
-import hugo.weaving.DebugLog;
 
 /**
  * Created by Administrator on 2016/8/29 0029.
@@ -84,7 +83,6 @@ public class PageView extends View {
         Log.d(TAG,"+PageView2");
     }
 
-    @DebugLog
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -391,7 +389,6 @@ public class PageView extends View {
      * @param collBook
      * @return
      */
-    @DebugLog
     public PageLoader getPageLoader(CollBookBean collBook) {
         Log.d(TAG,"+getPageLoader");
         // 判是否已经存在

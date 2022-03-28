@@ -8,10 +8,11 @@ import android.content.pm.Signature;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.ldp.reader.utils.EncryptUtils;
+import com.ldp.reader.utils.MD5Utils;
 import com.mob.MobSDK;
 import com.tencent.bugly.crashreport.CrashReport;
-
 
 
 /**
@@ -30,6 +31,7 @@ public class App extends Application {
         CrashReport.initCrashReport(getApplicationContext(), "ab86f05cf4", true);
 //        startService(new Intent(getContext(), DownloadService.class));
         // 初始化内存分析工具
+
         MobSDK.submitPolicyGrantResult(true, null);
         getCertificateMD5();
     }
@@ -44,19 +46,8 @@ public class App extends Application {
         return sInstance;
     }
 
-    private void getCertificateMD5() {
-        try {
-            String packageName = getApplicationContext().getPackageName();
-            PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(
-                    packageName, PackageManager.GET_SIGNATURES);
-            Signature[] signs = packageInfo.signatures;
-            Signature sign = signs[0];
-            byte[] cert = sign.toByteArray();
-            String md5 = EncryptUtils.encryptMD5ToString(cert);
-
-            Log.e(TAG, "md5 = " + md5);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void getCertificateMD5()
+    {
+//        Log.d(TAG, "getCertificateMD5: " + AppUtils.getAppSignaturesMD5());
     }
 }

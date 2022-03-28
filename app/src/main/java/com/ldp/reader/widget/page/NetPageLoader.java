@@ -18,7 +18,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import hugo.weaving.DebugLog;
 
 /**
  * Created by ldp on 17-5-29.
@@ -32,7 +31,6 @@ public class NetPageLoader extends PageLoader {
         super(pageView, collBook);
       firstTime = true;
     }
- @DebugLog
     private List<TxtChapter> convertTxtChapter(List<BookChapterBean> bookChapters) {
         List<TxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
         for (BookChapterBean bean : bookChapters) {
@@ -46,7 +44,6 @@ public class NetPageLoader extends PageLoader {
         return txtChapters;
     }
 
-    @DebugLog
     @Override
     public void refreshChapterList() {
         Log.e(TAG,"refreshChapterList");
@@ -87,7 +84,6 @@ public class NetPageLoader extends PageLoader {
     }
 
     // 装载上一章节的内容
-    @DebugLog
     @Override
     boolean parsePrevChapter() {
         boolean isRight = super.parsePrevChapter();
@@ -103,7 +99,6 @@ public class NetPageLoader extends PageLoader {
     // 装载当前章内容。
     boolean firstTime = true;
 
-    @DebugLog
     @Override
     boolean parseCurChapter() {
         Log.d("+打开章节NetPage", "parseCurChapter");
@@ -119,7 +114,6 @@ public class NetPageLoader extends PageLoader {
     }
 
     // 装载下一章节的内容
-    @DebugLog
     @Override
     boolean parseNextChapter() {
         boolean isRight = super.parseNextChapter();
@@ -136,7 +130,6 @@ public class NetPageLoader extends PageLoader {
     /**
      * 加载当前页的前面两个章节
      */
-    @DebugLog
     private void loadPrevChapter() {
         if (mPageChangeListener != null) {
             int end = mCurChapterPos;
@@ -153,7 +146,6 @@ public class NetPageLoader extends PageLoader {
     /**
      * 加载前一页，当前页，后一页。
      */
-    @DebugLog
    synchronized private void loadCurrentChapter() {
         Log.e(TAG,"+NetloadCurrentChapter");
         if (mPageChangeListener != null) {
@@ -184,7 +176,6 @@ public class NetPageLoader extends PageLoader {
     /**
      * 加载当前页的后两个章节
      */
-    @DebugLog
 
     private void loadNextChapter() {
         if (mPageChangeListener != null) {
@@ -208,7 +199,6 @@ public class NetPageLoader extends PageLoader {
         }
     }
 
-    @DebugLog
    synchronized private void requestChapters(int start, int end) {
      Log.e(TAG,"+requestChapters  "  + "start:"+start + "   end:"+ end);
         // 检验输入值
