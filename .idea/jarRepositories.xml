@@ -56,5 +56,15 @@
       <option name="name" value="maven4" />
       <option name="url" value="https://dl.bintray.com/qichuan/maven/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="MobSDK" />
+      <option name="name" value="MobSDK" />
+      <option name="url" value="https://mvn.mob.com/android" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven3" />
+      <option name="name" value="maven3" />
+      <option name="url" value="https://maven.aliyun.com/repository/gradle-plugin" />
+    </remote-repository>
   </component>
 </project>

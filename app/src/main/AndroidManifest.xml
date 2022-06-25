@@ -61,7 +61,8 @@
         <activity android:name="com.ldp.reader.ui.activity.LoginActivity" />
 
         <service android:name="com.ldp.reader.service.DownloadService" />
-
+        <meta-data android:name="android.max_aspect"
+            android:value="2.4" />
     </application>
 
 </manifest>

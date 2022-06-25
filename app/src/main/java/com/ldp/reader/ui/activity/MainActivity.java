@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+
+import com.blankj.utilcode.util.BarUtils;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -86,6 +88,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle("");
         setUpTabLayout();
+        BarUtils.transparentStatusBar(this);
     }
 
 
@@ -128,21 +131,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initWidget() {
         super.initWidget();
-        //性别选择框
-        SystemBarUtils.showStableStatusBar(this);
-        SystemBarUtils.transparentStatusBar(this);
     }
 
-    private void showSexChooseDialog() {
-        String sex = SharedPreUtils.getInstance()
-                .getString(Constant.SHARED_SEX);
-        if (sex.equals("")) {
-            mVp.postDelayed(() -> {
-                Dialog dialog = new SexChooseDialog(this);
-                dialog.show();
-            }, 500);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

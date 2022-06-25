@@ -19,7 +19,6 @@ import com.mob.secverify.OperationCallback;
 import com.mob.secverify.SecVerify;
 import com.mob.secverify.VerifyCallback;
 import com.mob.secverify.common.exception.VerifyException;
-import com.mob.secverify.datatype.LoginResult;
 import com.mob.secverify.datatype.VerifyResult;
 
 

@@ -129,7 +129,8 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
     // CrashReport
 
-    implementation "com.tencent.bugly:crashreport:$rootProject.buglyVersion" //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    implementation "com.tencent.bugly:crashreport:$rootProject.buglyVersion"
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
 //    implementation "com.tencent.bugly:nativecrashreport:$rootProject.buglyVersion"
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.airbnb.android:lottie:2.3.0'

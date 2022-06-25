@@ -2,18 +2,17 @@ package com.ldp.reader.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.view.Window;
 
 import com.ldp.reader.R;
-import com.ldp.reader.utils.StatusBarCompat;
-import com.ldp.reader.utils.SystemBarUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -31,14 +30,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private Unbinder unbinder;
+
     /****************************abstract area*************************************/
 
     @LayoutRes
     protected abstract int getContentId();
 
     /************************init area************************************/
-    protected void addDisposable(Disposable d){
-        if (mDisposable == null){
+    protected void addDisposable(Disposable d) {
+        if (mDisposable == null) {
             mDisposable = new CompositeDisposable();
         }
         mDisposable.add(d);
@@ -46,28 +46,32 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 配置Toolbar
+     *
      * @param toolbar
      */
-    protected void setUpToolbar(Toolbar toolbar){
+    protected void setUpToolbar(Toolbar toolbar) {
     }
 
-    protected void initData(Bundle savedInstanceState){
+    protected void initData(Bundle savedInstanceState) {
     }
+
     /**
      * 初始化零件
      */
     protected void initWidget() {
 
     }
+
     /**
      * 初始化点击事件
      */
-    protected void initClick(){
+    protected void initClick() {
     }
+
     /**
      * 逻辑使用区
      */
-    protected void processLogic(){
+    protected void processLogic() {
     }
 
     /*************************lifecycle area*****************************************************/
@@ -75,25 +79,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(getContentId());
         initData(savedInstanceState);
         unbinder = ButterKnife.bind(this);
-        Window window = getWindow();
-        View decorView = window.getDecorView();
-//
-//        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
-////        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-////
-////        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-////                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-//
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(Color.TRANSPARENT);
-//
-//        decorView.setSystemUiVisibility(uiOptions);
-        SystemBarUtils.showStableStatusBar(this);
-        SystemBarUtils.transparentStatusBar(this);
+
         initToolbar();
         initWidget();
         initClick();
@@ -101,37 +91,34 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         //更严谨是通过反射判断是否存在Toolbar
-        mToolbar = findViewById( R.id.toolbar);
-        if (mToolbar != null){
+        mToolbar = findViewById(R.id.toolbar);
+        if (mToolbar != null) {
             supportActionBar(mToolbar);
             setUpToolbar(mToolbar);
         }
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        if (mDisposable != null){
+        if (mDisposable != null) {
             mDisposable.dispose();
         }
     }
 
     /**************************used method area*******************************************/
-
-    protected void startActivity(Class<? extends AppCompatActivity> activity){
-        Intent intent = new Intent(this,activity);
+    protected void startActivity(Class<? extends AppCompatActivity> activity) {
+        Intent intent = new Intent(this, activity);
         startActivity(intent);
-
     }
 
-    protected ActionBar supportActionBar(Toolbar toolbar){
+    protected ActionBar supportActionBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
@@ -141,7 +128,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         return actionBar;
     }
 
-    protected void setStatusBarColor(int statusColor){
-        StatusBarCompat.compat(this, ContextCompat.getColor(this, statusColor));
-    }
 }

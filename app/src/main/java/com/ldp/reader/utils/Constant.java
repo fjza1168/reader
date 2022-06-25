@@ -29,7 +29,10 @@ public class Constant {
 
     //阿里云
 //    public static final String API_BASE_URL_OWN= "http://47.98.166.103";
+    //腾讯云
     public static final String API_BASE_URL_OWN= "http://42.192.230.227";
+//    public static final String API_BASE_URL_OWN= "http://192.168.124.13";
+
 
 
     //book type
